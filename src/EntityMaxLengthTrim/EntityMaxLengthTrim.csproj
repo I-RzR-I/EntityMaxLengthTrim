@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Authors>RzR</Authors>
+    <Copyright>RzR</Copyright>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageIcon>PackageIcon.png</PackageIcon>
+    <NoWarn>$(NoWarn);CS8032</NoWarn>
+    <EnableNETAnalyzers>false</EnableNETAnalyzers>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageTags>MaxLength;Maximum;Length;Entity;Split;Truncate;Trim;Dto;Model;Parse;string;DataType;DB;DataBase</PackageTags>
+    <RepositoryUrl>https://github.com/I-RzR-I/EntityMaxLengthTrim</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/I-RzR-I/EntityMaxLengthTrim</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageDescription>One important thing about this repository, you have the possibility to avoid database exceptions related to exceeding the limit of the maximum allowed length of the string type columns. To specify the maximum allowed string length you can use data annotation attributes predefined in `System.ComponentModel.DataAnnotations` or a new custom attribute.</PackageDescription>
+    <Summary>One important thing about this repository, you have the possibility to avoid database exceptions related to exceeding the limit of the maximum allowed length of the string type columns.</Summary>
+    <PackageTitle>RzR.Shared.Entity (EntityMaxLengthTrim)</PackageTitle>
+    <Title>RzR.Shared.Entity (EntityMaxLengthTrim)</Title>
+    <LangVersion>9.0</LangVersion>
+    <Language>en-US</Language>
+    <PackageIconUrl />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\shared\GeneralAssemblyInfo.cs" Link="Properties\GeneralAssemblyInfo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="..\..\assets\PackageIcon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+  </ItemGroup>
+
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties BuildVersion_StartDate="2022/9/15" />
+    </VisualStudio>
+  </ProjectExtensions>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="PowerShell -NoProfile -ExecutionPolicy unrestricted -file $(SolutionDir)../build/pack.ps1 $(ConfigurationName)" />
+  </Target>
+</Project>
