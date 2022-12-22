@@ -14,6 +14,8 @@
 //  </summary>
 // ***********************************************************************
 
+using CodeSource;
+
 namespace EntityMaxLengthTrim.Extensions
 {
     /// <summary>
@@ -29,6 +31,7 @@ namespace EntityMaxLengthTrim.Extensions
         /// <param name="maxLength">total length of characters to maintain before the truncate happens</param>
         /// <param name="useDots">Use 3 dots(...) in the end of string</param>
         /// <returns>truncated string</returns>
+        [CodeSource(sourceUrl: "https://github.com/I-RzR-I/DomainCommonExtensions/blob/main/src/DomainCommonExtensions/DataTypeExtensions/StringExtensions.cs", authorName: "RzR", copyright: "RzR", appliedOn: "2022-09-27")]
         internal static string Truncate(this string text, int maxLength, bool useDots = false)
         {
             const string suffix = "...";

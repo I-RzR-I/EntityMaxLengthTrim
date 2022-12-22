@@ -21,6 +21,9 @@ using System.Collections.Generic;
 using ConsoleFrameworkTest.Models;
 using EntityMaxLengthTrim.Interceptors;
 using EntityMaxLengthTrim.Options;
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable UnusedParameter.Local
+// ReSharper disable UnusedVariable
 
 #endregion
 
@@ -28,6 +31,8 @@ namespace ConsoleFrameworkTest
 {
     internal class Program
     {
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
+#pragma warning disable IDE0060 // Remove unused parameter
         private static void Main(string[] args)
         {
             var newParsedData = StringInterceptor.ApplyStringMaxAllowedLength(new Foo
