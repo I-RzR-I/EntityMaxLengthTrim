@@ -3,11 +3,19 @@ using System.Collections.Generic;
 using ConsoleCoreTest.Models;
 using EntityMaxLengthTrim.Interceptors;
 using EntityMaxLengthTrim.Options;
+// ReSharper disable UnusedParameter.Local
+// ReSharper disable UnusedVariable
+// ReSharper disable ClassNeverInstantiated.Global
+// ReSharper disable ArrangeTypeModifiers
+// ReSharper disable ArrangeTypeMemberModifiers
+// ReSharper disable RedundantArgumentDefaultValue
 
 namespace ConsoleCoreTest
 {
     class Program
     {
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
+#pragma warning disable IDE0060 // Remove unused parameter
         static void Main(string[] args)
         {
             var newParsedData = StringInterceptor.ApplyStringMaxAllowedLength(new Foo()
