@@ -1,4 +1,4 @@
-> **Note** This repository is developed in .netstandard2.0
+> **Note** This repository is developed for .netstandard1.5+ and net framework 4.5
 
 One important thing about this repository is that you can truncate input string in the fields/properties at the maximum allowed length from DB. To specify the maximum allowed string length you can use data annotation attributes predefined in `System.ComponentModel.DataAnnotations` or a new custom attribute. 
 

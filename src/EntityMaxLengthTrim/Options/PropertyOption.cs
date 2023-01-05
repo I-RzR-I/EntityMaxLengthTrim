@@ -14,6 +14,7 @@
 //  </summary>
 // ***********************************************************************
 
+// ReSharper disable ClassNeverInstantiated.Global
 namespace EntityMaxLengthTrim.Options
 {
     /// <summary>
