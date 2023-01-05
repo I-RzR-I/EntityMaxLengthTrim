@@ -20,8 +20,10 @@
 using System;
 using System.Diagnostics;
 #endif
-
 using System.ComponentModel.DataAnnotations;
+#if NETSTANDARD1_5
+using System.Reflection;
+#endif
 using System.Linq;
 using EntityMaxLengthTrim.Attributes;
 
@@ -108,7 +110,7 @@ namespace EntityMaxLengthTrim.Helpers
             }
             catch { return null; }
         }
-
+        
         /// <summary>
         ///     Get max length from 'MaxAllowedLength' attribute
         /// </summary>

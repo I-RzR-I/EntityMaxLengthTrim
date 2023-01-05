@@ -33,14 +33,16 @@ using System.Resources;
 [assembly: AssemblyTrademark("® RzR™")]
 [assembly: AssemblyDescription("One important thing about this repository, you have the possibility to avoid database exceptions related to exceeding the limit of the maximum allowed length of the string type columns. To specify the maximum allowed string length you can use data annotation attributes predefined in `System.ComponentModel.DataAnnotations` or a new custom attribute.")]
 
+#if NET45_OR_GREATER || NET || NETSTANDARD
 [assembly: AssemblyMetadata("TermsOfService", "")]
 
 [assembly: AssemblyMetadata("ContactUrl", "")]
 [assembly: AssemblyMetadata("ContactName", "RzR")]
 [assembly: AssemblyMetadata("ContactEmail", "ddpRzR@hotmail.com")]
-
+#endif
+#if NETSTANDARD1_6_OR_GREATER || NET35_OR_GREATER
 [assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.MainAssembly)]
-
-[assembly: AssemblyVersion("1.0.1.0644")]
-[assembly: AssemblyFileVersion("1.0.1.0644")]
-[assembly: AssemblyInformationalVersion("1.0.1.0644")]
+#endif
+[assembly: AssemblyVersion("1.0.2.2008")]
+[assembly: AssemblyFileVersion("1.0.2.2008")]
+[assembly: AssemblyInformationalVersion("1.0.2.x")]

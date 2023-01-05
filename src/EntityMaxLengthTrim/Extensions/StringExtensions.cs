@@ -4,7 +4,7 @@
 //  Created On       : 2022-09-24 03:47
 // 
 //  Last Modified By : RzR
-//  Last Modified On : 2022-09-24 03:47
+//  Last Modified On : 2023-01-05 09:22
 // ***********************************************************************
 //  <copyright file="StringExtensions.cs" company="">
 //   Copyright (c) RzR. All rights reserved.
@@ -14,7 +14,11 @@
 //  </summary>
 // ***********************************************************************
 
+#region U S A G E S
+
 using CodeSource;
+
+#endregion
 
 namespace EntityMaxLengthTrim.Extensions
 {
@@ -31,7 +35,9 @@ namespace EntityMaxLengthTrim.Extensions
         /// <param name="maxLength">total length of characters to maintain before the truncate happens</param>
         /// <param name="useDots">Use 3 dots(...) in the end of string</param>
         /// <returns>truncated string</returns>
-        [CodeSource(sourceUrl: "https://github.com/I-RzR-I/DomainCommonExtensions/blob/main/src/DomainCommonExtensions/DataTypeExtensions/StringExtensions.cs", authorName: "RzR", copyright: "RzR", appliedOn: "2022-09-27")]
+        [CodeSource(
+            "https://github.com/I-RzR-I/DomainCommonExtensions/blob/main/src/DomainCommonExtensions/DataTypeExtensions/StringExtensions.cs",
+            "RzR", "RzR", "2022-09-27")]
         internal static string Truncate(this string text, int maxLength, bool useDots = false)
         {
             const string suffix = "...";

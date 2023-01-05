@@ -40,11 +40,9 @@ namespace EntityMaxLengthTrim.Extensions
         {
             try
             {
-                var properties = type
+                return type
                     .GetProperties(BindingFlags.GetProperty | BindingFlags.Instance | BindingFlags.Public)
                     .ToList();
-
-                return properties;
             }
             catch { return null; }
         }
