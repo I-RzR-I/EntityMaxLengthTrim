@@ -51,7 +51,7 @@ namespace EntityMaxLengthTrim.Interceptors
                 var stringProperties = entityType.GetStringPropertyInfos();
                 foreach (var prop in stringProperties)
                 {
-                    var currentValue = (string) prop.GetValue(entity, null);
+                    var currentValue = (string)prop.GetValue(entity, null);
                     if (string.IsNullOrEmpty(currentValue)) continue;
 
                     var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
@@ -95,7 +95,7 @@ namespace EntityMaxLengthTrim.Interceptors
                     : entityType.GetStringPropertyInfos();
                 foreach (var prop in stringProperties)
                 {
-                    var currentValue = (string) prop.GetValue(entity, null);
+                    var currentValue = (string)prop.GetValue(entity, null);
                     if (string.IsNullOrEmpty(currentValue)) continue;
 
                     var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
@@ -105,6 +105,45 @@ namespace EntityMaxLengthTrim.Interceptors
 
                     var useWithDotTruncate = truncateWithDots?.Any(x => x == prop.Name) ?? false;
                     var newValue = currentValue.Truncate(maxLength.Value, useWithDotTruncate);
+                    prop.SetValue(entity, newValue, null);
+                }
+            }
+            catch
+            {
+                // ignored
+                // In case of any error, return unmodified entity
+            }
+
+            return entity;
+        }
+
+        /// <summary>
+        ///     Apply maximum allowed string length filter
+        /// </summary>
+        /// <param name="entity">Input entity</param>
+        /// <param name="propertyName">Property name</param>
+        /// <param name="useDots">If set to <see langword="true" />, then property value at the end will have dots (...); otherwise, value will be truncated at the allowed limit.</param>
+        /// <returns></returns>
+        /// <typeparam name="TEntity">Current entity type</typeparam>
+        /// <remarks></remarks>
+        public static TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, string propertyName, bool useDots = true)
+        {
+            if (string.IsNullOrEmpty(propertyName)) return entity;
+
+            try
+            {
+                var entityType = typeof(TEntity);
+                var prop = entityType.GetStringPropertyInfos().FirstOrDefault(x => x.Name.Equals(propertyName));
+                if (prop != null)
+                {
+                    var currentValue = (string)prop.GetValue(entity, null);
+                    if (string.IsNullOrEmpty(currentValue)) return entity;
+
+                    var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
+                    if (maxLength == null) return entity;
+                    if (!(currentValue.Length > maxLength)) return entity;
+
+                    var newValue = currentValue.Truncate(maxLength.Value, useDots);
                     prop.SetValue(entity, newValue, null);
                 }
             }
@@ -139,7 +178,7 @@ namespace EntityMaxLengthTrim.Interceptors
                     : entityType.GetStringPropertyInfos();
                 foreach (var prop in stringProperties)
                 {
-                    var currentValue = (string) prop.GetValue(entity, null);
+                    var currentValue = (string)prop.GetValue(entity, null);
                     if (string.IsNullOrEmpty(currentValue)) continue;
 
                     var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
