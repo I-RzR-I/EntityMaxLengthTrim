@@ -1,5 +1,8 @@
 > **Note** This repository is developed for .netstandard1.5+ and net framework 4.5
 
+[![NuGet Version](https://img.shields.io/nuget/v/EntityMaxLengthTrim.svg?style=flat&logo=nuget)](https://www.nuget.org/packages/EntityMaxLengthTrim/)
+[![Nuget Downloads](https://img.shields.io/nuget/dt/EntityMaxLengthTrim.svg?style=flat&logo=nuget)](https://www.nuget.org/packages/EntityMaxLengthTrim)
+
 One important thing about this repository is that you can truncate input string in the fields/properties at the maximum allowed length from DB. To specify the maximum allowed string length you can use data annotation attributes predefined in `System.ComponentModel.DataAnnotations` or a new custom attribute. 
 
 The maximum allowed length will be searched in the attributes(you may use one of these):
@@ -17,8 +20,6 @@ No additional components or packs are required for use. So, it only needs to be 
 
 
 > `Install-Package EntityMaxLengthTrim -Version x.x.x.x`
-
-[![NuGet Version](https://img.shields.io/nuget/v/EntityMaxLengthTrim.svg?style=flat)](https://www.nuget.org/packages/EntityMaxLengthTrim/)
 
 ## Content
 1. [USING](docs/usage.md)
