@@ -41,49 +41,44 @@ namespace EntityModelStringTruncateTest
         {
             _test1Model = new FooModel
             {
-                Name = "Here should be the new name of FOO",
+                Name = Constants.TextWithLength35,
                 FullName = string.Empty,
                 Description = null
             };
 
             _test2Model = new FooModel
             {
-                Name = "Here should be the new name of FOO",
+                Name = Constants.TextWithLength35,
                 FullName = string.Empty,
                 Description = null
             };
 
             _test3Model = new FooModel
             {
-                Name = "Here should be the new name of FOO",
+                Name = Constants.TextWithLength35,
                 FullName = string.Empty,
                 Description = null
             };
 
             _test4Model = new FooModel
             {
-                Name = "Here should be the new name of FOO",
+                Name = Constants.TextWithLength35,
                 FullName = string.Empty,
-                Description =
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                Description = Constants.TextWithLength575
             };
 
             _test5Model = new FooModel
             {
-                Name = "Here should be the new name of FOO",
-                FullName =
-                    "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-                Description =
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                Name = Constants.TextWithLength35,
+                FullName = Constants.TextWithLength575,
+                Description = Constants.TextWithLength575
             };
 
             _test6Model = new FooModel
             {
-                Name = "Here should be the new name of FOO",
-                FullName =
-                    "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
-                Description =
-                    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                Name = Constants.TextWithLength35,
+                FullName = Constants.TextWithLength575,
+                Description = Constants.TextWithLength575
             };
         }
 
@@ -189,6 +184,21 @@ namespace EntityModelStringTruncateTest
             Assert.IsNotNull(parsedData.Description);
             Assert.AreEqual(PropertyMaxLengthHelper.DescriptionMaxLength, parsedData.Description.Length);
             Assert.IsTrue(parsedData.Description.EndsWith("..."));
+        }
+
+        [Test]
+        public void Test7()
+        {
+            var data = new FooModelIntercept()
+            {
+                Name = Constants.TextWithLength35,
+                FullName = Constants.TextWithLength35,
+                Description = Constants.TextWithLength575
+            };
+
+            Assert.IsTrue(PropertyMaxLengthHelper.NameMaxLength >= data.Name.Length);
+            Assert.IsTrue(PropertyMaxLengthHelper.FullNameMaxLength >= data.FullName.Length);
+            Assert.IsTrue(PropertyMaxLengthHelper.DescriptionMaxLength >= data.Description.Length);
         }
     }
 }

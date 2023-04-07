@@ -15,8 +15,9 @@ This attribute has not applied any validation and is the extension for the `Attr
 In addition for more options in use, was added a few settings:
 ```csharp
 TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, bool useDotOnEnd = false);
-TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, List<string> truncateWithDots, bool processOnlyAssigned = false);
-TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, List<PropertyOption> options, bool processOnlyAssigned = false);
+TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, IReadOnlyCollection<string> truncateWithDots, bool processOnlyAssigned = false);
+TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, string propertyName, bool useDots = true);
+TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, IReadOnlyCollection<PropertyOption> options, bool processOnlyAssigned = false);
 ```
 
 ##### Data model:
@@ -61,6 +62,59 @@ var newParsedDataWithDots = StringInterceptor.ApplyStringMaxAllowedLength(new Fo
 // newParsedData.Name => 'Here should be the n'
 // newParsedDataWithDots.Name => 'Here should be th...'
 
-
 ```
+
+```csharp
+public class Foo : INotifyPropertyChanged
+{
+    private string _name;
+    private string _fullName;
+    private string _description;
+
+    [MaxLength(30)]
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            if (_name == value) return;
+            _name = value;
+            OnPropertyChanged(nameof(Name));
+        }
+    }
+
+    [StringLength(50)]
+    public string FullName
+    {
+        get => _fullName;
+        set
+        {
+            if (_fullName == value) return;
+            _fullName = value;
+            OnPropertyChanged(nameof(FullName));
+        }
+    }
+
+    [MaxAllowedLength(150)]
+    public string Description
+    {
+        get => _description;
+        set
+        {
+            if (_description == value) return;
+            _description = value;
+            OnPropertyChanged(nameof(Description));
+        }
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        StringInterceptor.ApplyStringMaxAllowedLength(this, propertyName, false);
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+}
+```
+
 

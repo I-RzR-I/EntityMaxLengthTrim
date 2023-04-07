@@ -4,3 +4,7 @@
 -> Support for `net45`, `netstandard1.5`, `netstandard2.1`.<br/>
 ### **v.1.0.3.1800** 
 -> Parse only one property from entity.<br/>
+### **1.0.4.1134** 
+-> Change List to IReadOnlyCollection and IEnumerable.<br/>
+-> Add few tests.<br/>
+-> Adjust usage.<br/>
