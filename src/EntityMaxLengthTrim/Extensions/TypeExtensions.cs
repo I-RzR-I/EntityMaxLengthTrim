@@ -73,7 +73,7 @@ namespace EntityMaxLengthTrim.Extensions
         /// <param name="type">Entity type</param>
         /// <returns></returns>
         [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions/blob/9a580a3604f5d6127e887da837e7954f3e47c9d6/src/DomainCommonExtensions/CommonExtensions/TypeExtensions.cs#L1", "RzR", 1.0)]
-        internal static List<string> GetStringPropertyNames(this Type type)
+        internal static IEnumerable<string> GetStringPropertyNames(this Type type)
         {
             try
             {

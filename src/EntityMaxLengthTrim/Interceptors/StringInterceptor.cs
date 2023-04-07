@@ -4,7 +4,7 @@
 //  Created On       : 2022-09-24 03:55
 // 
 //  Last Modified By : RzR
-//  Last Modified On : 2022-09-26 09:42
+//  Last Modified On : 2023-04-07 13:41
 // ***********************************************************************
 //  <copyright file="StringInterceptor.cs" company="">
 //   Copyright (c) RzR. All rights reserved.
@@ -84,7 +84,7 @@ namespace EntityMaxLengthTrim.Interceptors
         /// <returns>Processed/parsed entity with new values</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
         /// <remarks></remarks>
-        public static TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, List<string> truncateWithDots,
+        public static TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, IReadOnlyCollection<string> truncateWithDots,
             bool processOnlyAssigned = false)
         {
             try
@@ -122,11 +122,15 @@ namespace EntityMaxLengthTrim.Interceptors
         /// </summary>
         /// <param name="entity">Input entity</param>
         /// <param name="propertyName">Property name</param>
-        /// <param name="useDots">If set to <see langword="true" />, then property value at the end will have dots (...); otherwise, value will be truncated at the allowed limit.</param>
+        /// <param name="useDots">
+        ///     If set to <see langword="true" />, then property value at the end will have dots (...);
+        ///     otherwise, value will be truncated at the allowed limit.
+        /// </param>
         /// <returns></returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
         /// <remarks></remarks>
-        public static TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, string propertyName, bool useDots = true)
+        public static TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, string propertyName,
+            bool useDots = true)
         {
             if (string.IsNullOrEmpty(propertyName)) return entity;
 
@@ -167,7 +171,8 @@ namespace EntityMaxLengthTrim.Interceptors
         /// <returns>Processed/parsed entity with new values</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
         /// <remarks></remarks>
-        public static TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, List<PropertyOption> options,
+        public static TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity,
+            IReadOnlyCollection<PropertyOption> options,
             bool processOnlyAssigned = false)
         {
             try
