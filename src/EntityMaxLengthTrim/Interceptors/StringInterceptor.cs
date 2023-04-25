@@ -126,7 +126,7 @@ namespace EntityMaxLengthTrim.Interceptors
         ///     If set to <see langword="true" />, then property value at the end will have dots (...);
         ///     otherwise, value will be truncated at the allowed limit.
         /// </param>
-        /// <returns></returns>
+        /// <returns>Processed/parsed entity with new values</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
         /// <remarks></remarks>
         public static TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, string propertyName,
@@ -161,6 +161,7 @@ namespace EntityMaxLengthTrim.Interceptors
         }
 
         /// <summary>
+        ///     Apply maximum allowed string length filter
         /// </summary>
         /// <param name="entity">Required. Input entity</param>
         /// <param name="options">Required. Option for processing fields</param>

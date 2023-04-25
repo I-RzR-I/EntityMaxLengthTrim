@@ -25,22 +25,22 @@ namespace EntityMaxLengthTrim.Attributes
     /// <summary>
     ///     Maximum allowed string length attribute
     /// </summary>
-    /// <remarks></remarks>
+    /// <remarks>Current property is allowed only for property decoration</remarks>
     [AttributeUsage(AttributeTargets.Property)]
     public class MaxAllowedLengthAttribute : Attribute
     {
         /// <summary>
         ///     Gets or sets maximum allows string length.
         /// </summary>
-        /// <value></value>
-        /// <remarks></remarks>
+        /// <value>Maximum allowed length of property</value>
+        /// <remarks>Allowed property type is 'Int32' not nullable</remarks>
         public int MaxLength { get; set; }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="EntityMaxLengthTrim.Attributes.MaxAllowedLengthAttribute" /> class.
         /// </summary>
         /// <param name="maxLength">Maximum allows string length</param>
-        /// <remarks></remarks>
+        /// <remarks>Initialize property maximum length</remarks>
         public MaxAllowedLengthAttribute(int maxLength)
         {
             MaxLength = maxLength;

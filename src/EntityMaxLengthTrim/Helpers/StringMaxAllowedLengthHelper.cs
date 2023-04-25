@@ -41,8 +41,8 @@ namespace EntityMaxLengthTrim.Helpers
         ///     Get the maximum allowed length for string property
         /// </summary>
         /// <param name="propertyName">Property name</param>
-        /// <returns></returns>
-        /// <remarks></remarks>
+        /// <returns>Return property length decorated with DatAnnotation</returns>
+        /// <remarks>Decoration allowed attributes: MaxLengthAttribute or StringLengthAttribute or MaxAllowedLengthAttribute</remarks>
         internal static int? GetMaxAllowedLength<T>(this string propertyName)
         {
             try
@@ -77,8 +77,8 @@ namespace EntityMaxLengthTrim.Helpers
         ///     Get max length from 'MaxLength' attribute
         /// </summary>
         /// <param name="propertyName">Property name</param>
-        /// <returns></returns>
-        /// <remarks></remarks>
+        /// <returns>Return property length decorated with MaxLengthAttribute</returns>
+        /// <remarks>Return 'null' or '0' length in case of exception or not set property length value</remarks>
         private static int? GetFromMaxLengthAttribute<T>(this string propertyName)
         {
             try
@@ -96,8 +96,8 @@ namespace EntityMaxLengthTrim.Helpers
         ///     Get max length from 'StringLength' attribute
         /// </summary>
         /// <param name="propertyName">Property name</param>
-        /// <returns></returns>
-        /// <remarks></remarks>
+        /// <returns>Return property length decorated with StringLengthAttribute</returns>
+        /// <remarks>Return 'null' or '0' length in case of exception or not set property length value</remarks>
         private static int? GetFromStringLengthAttribute<T>(this string propertyName)
         {
             try
@@ -110,13 +110,13 @@ namespace EntityMaxLengthTrim.Helpers
             }
             catch { return null; }
         }
-        
+
         /// <summary>
         ///     Get max length from 'MaxAllowedLength' attribute
         /// </summary>
         /// <param name="propertyName">Property name</param>
-        /// <returns></returns>
-        /// <remarks></remarks>
+        /// <returns>Return property length decorated with MaxAllowedLengthAttribute</returns>
+        /// <remarks>Return 'null' or '0' length in case of exception or not set property length value</remarks>
         private static int? GetFromMaxAllowedLengthAttribute<T>(this string propertyName)
         {
             try

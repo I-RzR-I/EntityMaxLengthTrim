@@ -20,13 +20,13 @@ namespace EntityMaxLengthTrim.Options
     /// <summary>
     ///     Property option
     /// </summary>
-    /// <remarks></remarks>
+    /// <remarks>Options used to specify truncate details</remarks>
     public class PropertyOption
     {
         /// <summary>
         ///     Gets or sets property name.
         /// </summary>
-        /// <value></value>
+        /// <value>Name of property to be truncated (string property name)</value>
         /// <remarks></remarks>
         public string Name { get; set; }
 
@@ -34,9 +34,9 @@ namespace EntityMaxLengthTrim.Options
         ///     Gets or sets a value indicating whether use dots on the end of string.
         /// </summary>
         /// <value>
-        ///     <see langword="true" /> if at the end of the string will be ste (...); otherwise, <see langword="false" />.
+        ///     <see langword="true" /> if at the end of the string will be set (...); otherwise, <see langword="false" />.
         /// </value>
-        /// <remarks></remarks>
+        /// <remarks>Bool value</remarks>
         public bool UseDots { get; set; }
     }
 }
