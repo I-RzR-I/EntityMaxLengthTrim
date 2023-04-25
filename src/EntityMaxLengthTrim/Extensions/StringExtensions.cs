@@ -25,7 +25,7 @@ namespace EntityMaxLengthTrim.Extensions
     /// <summary>
     ///     Local string extensions
     /// </summary>
-    /// <remarks></remarks>
+    /// <remarks>Extension for string data type, which allows more efficient use and implement code</remarks>
     internal static class StringExtensions
     {
         /// <summary>
@@ -34,7 +34,7 @@ namespace EntityMaxLengthTrim.Extensions
         /// <param name="text">string that will be truncated</param>
         /// <param name="maxLength">total length of characters to maintain before the truncate happens</param>
         /// <param name="useDots">Use 3 dots(...) in the end of string</param>
-        /// <returns>truncated string</returns>
+        /// <returns>Truncated string</returns>
         [CodeSource(
             "https://github.com/I-RzR-I/DomainCommonExtensions/blob/main/src/DomainCommonExtensions/DataTypeExtensions/StringExtensions.cs",
             "RzR", "RzR", "2022-09-27")]

@@ -29,14 +29,14 @@ namespace EntityMaxLengthTrim.Extensions
     /// <summary>
     ///     Type extensions
     /// </summary>
-    /// <remarks></remarks>
+    /// <remarks>Extension for 'System.Type', which allows more efficient use and implement code</remarks>
     internal static class TypeExtensions
     {
         /// <summary>
         ///     Get all properties
         /// </summary>
         /// <param name="type">Entity type</param>
-        /// <returns></returns>
+        /// <returns>Return list of properties(PropertyInfo) from specified 'System.Type'.</returns>
         [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions/blob/9a580a3604f5d6127e887da837e7954f3e47c9d6/src/DomainCommonExtensions/CommonExtensions/TypeExtensions.cs#L1", "RzR", 1.0)]
         internal static IEnumerable<PropertyInfo> GetPropertyInfos(this Type type)
         {
@@ -53,7 +53,7 @@ namespace EntityMaxLengthTrim.Extensions
         ///     Get all string properties
         /// </summary>
         /// <param name="type">Entity type</param>
-        /// <returns></returns>
+        /// <returns>Return list of properties(PropertyInfo, string properties) from specified 'System.Type'</returns>
         [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions/blob/9a580a3604f5d6127e887da837e7954f3e47c9d6/src/DomainCommonExtensions/CommonExtensions/TypeExtensions.cs#L1", "RzR", 1.0)]
         internal static IEnumerable<PropertyInfo> GetStringPropertyInfos(this Type type)
         {
@@ -71,7 +71,7 @@ namespace EntityMaxLengthTrim.Extensions
         ///     Get all string properties name
         /// </summary>
         /// <param name="type">Entity type</param>
-        /// <returns></returns>
+        /// <returns>Return list of properties (string properties) from specified 'System.Type'</returns>
         [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions/blob/9a580a3604f5d6127e887da837e7954f3e47c9d6/src/DomainCommonExtensions/CommonExtensions/TypeExtensions.cs#L1", "RzR", 1.0)]
         internal static IEnumerable<string> GetStringPropertyNames(this Type type)
         {
