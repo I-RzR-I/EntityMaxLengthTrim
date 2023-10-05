@@ -8,3 +8,5 @@
 -> Change List to IReadOnlyCollection and IEnumerable.<br/>
 -> Add few tests.<br/>
 -> Adjust usage.<br/>
+### **1.0.5.0555** 
+-> Add validation on ctor attribute input param.<br/>

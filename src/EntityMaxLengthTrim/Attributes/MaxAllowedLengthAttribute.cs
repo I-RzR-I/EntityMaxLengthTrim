@@ -17,6 +17,7 @@
 #region U S A G E S
 
 using System;
+using EntityMaxLengthTrim.Extensions;
 
 #endregion
 
@@ -34,7 +35,7 @@ namespace EntityMaxLengthTrim.Attributes
         /// </summary>
         /// <value>Maximum allowed length of property</value>
         /// <remarks>Allowed property type is 'Int32' not nullable</remarks>
-        public int MaxLength { get; set; }
+        public int MaxLength { get; }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="EntityMaxLengthTrim.Attributes.MaxAllowedLengthAttribute" /> class.
@@ -43,6 +44,9 @@ namespace EntityMaxLengthTrim.Attributes
         /// <remarks>Initialize property maximum length</remarks>
         public MaxAllowedLengthAttribute(int maxLength)
         {
+            if(maxLength.IsNullOrZero())
+                throw new ArgumentException($"The {nameof(maxLength)} must be greater then 0!");
+
             MaxLength = maxLength;
         }
     }
