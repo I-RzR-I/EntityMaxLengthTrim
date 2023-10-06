@@ -6,7 +6,7 @@
 //  Last Modified By : RzR
 //  Last Modified On : 2022-09-24 03:34
 // ***********************************************************************
-//  <copyright file="StringMaxAllowedLengthHelper.cs" company="">
+//  <copyright file="StringMaxAllowedLengthExtensions.cs" company="">
 //   Copyright (c) RzR. All rights reserved.
 //  </copyright>
 // 
@@ -16,26 +16,26 @@
 
 #region U S A G E S
 
-#if DEBUG
 using System;
-using System.Diagnostics;
-#endif
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
+using System.Linq;
+using EntityMaxLengthTrim.Attributes;
+#if DEBUG
+#endif
 #if NETSTANDARD1_5
 using System.Reflection;
 #endif
-using System.Linq;
-using EntityMaxLengthTrim.Attributes;
 
 #endregion
 
-namespace EntityMaxLengthTrim.Helpers
+namespace EntityMaxLengthTrim.Extensions
 {
     /// <summary>
-    ///     Maximum allowed length for string type helper
+    ///     Maximum allowed length for string type extensions
     /// </summary>
     /// <remarks></remarks>
-    internal static class StringMaxAllowedLengthHelper
+    internal static class StringMaxAllowedLengthExtensions
     {
         /// <summary>
         ///     Get the maximum allowed length for string property

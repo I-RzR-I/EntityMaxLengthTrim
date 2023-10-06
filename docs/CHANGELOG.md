@@ -10,3 +10,6 @@
 -> Adjust usage.<br/>
 ### **1.0.5.0555** 
 -> Add validation on ctor attribute input param.<br/>
+### **1.0.6.2158** 
+-> Add fluent extensions to access available methods for save save string properties.<br/>
+-> Reorganize some classes in the project.<br/>
