@@ -43,6 +43,7 @@ using System.Resources;
 #if NETSTANDARD1_6_OR_GREATER || NET35_OR_GREATER
 [assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.MainAssembly)]
 #endif
-[assembly: AssemblyVersion("1.0.6.2158")]
-[assembly: AssemblyFileVersion("1.0.6.2158")]
-[assembly: AssemblyInformationalVersion("1.0.6.x")]
+
+[assembly: AssemblyVersion("1.0.7.2114")]
+[assembly: AssemblyFileVersion("1.0.7.2114")]
+[assembly: AssemblyInformationalVersion("1.0.7.x")]
