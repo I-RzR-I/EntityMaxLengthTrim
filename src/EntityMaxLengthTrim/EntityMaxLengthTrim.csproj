@@ -24,6 +24,10 @@
     <Language>en-US</Language>
     <RepositoryType>GIT</RepositoryType>
     <PackageIconUrl />
+
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>EntityMaxLengthTrimSign.pfx</AssemblyOriginatorKeyFile>
+    <DelaySign>true</DelaySign>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -51,7 +55,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
     <PackageReference Include="CodeSource">
-      <Version>1.0.4.1723</Version>
+      <Version>1.0.5.1933</Version>
     </PackageReference>
     <PackageReference Include="System.ComponentModel.Annotations">
       <Version>5.0</Version>
@@ -60,7 +64,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5'">
     <PackageReference Include="CodeSource">
-      <Version>1.0.4.1723</Version>
+      <Version>1.0.5.1933</Version>
     </PackageReference>
     <PackageReference Include="System.ComponentModel.Annotations">
       <Version>5.0</Version>
@@ -75,7 +79,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
     <PackageReference Include="CodeSource">
-      <Version>1.0.4.1723</Version>
+      <Version>1.0.5.1933</Version>
     </PackageReference>
     <PackageReference Include="System.ComponentModel.Annotations">
       <Version>5.0</Version>
@@ -84,7 +88,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
     <PackageReference Include="CodeSource">
-      <Version>1.0.4.1723</Version>
+      <Version>1.0.5.1933</Version>
     </PackageReference>
     <PackageReference Include="System.ComponentModel.Annotations">
       <Version>5.0</Version>
