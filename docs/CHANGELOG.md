@@ -22,3 +22,6 @@
 ### **1.0.7.2114** 
 -> Update lib version.<br/>
 -> Add option to sign the new version of the files.<br/>
+
+### **1.0.8.2220** 
+-> Fix wrong modification.<br />
