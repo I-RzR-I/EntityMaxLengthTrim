@@ -43,10 +43,10 @@ namespace EntityMaxLengthTrim.Extensions
             const string suffix = "...";
             var truncatedString = text;
 
-            if (maxLength <= 0) return truncatedString;
+            if (maxLength.IsLessOrEqualWithZero()) return truncatedString;
             var strLength = maxLength - (useDots.Equals(true) ? suffix.Length : 0);
 
-            if (strLength <= 0) return truncatedString;
+            if (strLength.IsLessOrEqualWithZero()) return truncatedString;
 
             if (text == null || text.Length <= maxLength) return truncatedString;
 

@@ -55,7 +55,7 @@ namespace EntityMaxLengthTrim.Interceptors
 
                     var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
 
-                    if (maxLength == null) continue;
+                    if (maxLength.IsNull()) continue;
                     if (!(currentValue.Length > maxLength)) continue;
 
                     var newValue = currentValue.Truncate(maxLength.Value, useDotOnEnd);
@@ -99,7 +99,7 @@ namespace EntityMaxLengthTrim.Interceptors
 
                     var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
 
-                    if (maxLength == null) continue;
+                    if (maxLength.IsNull()) continue;
                     if (!(currentValue.Length > maxLength)) continue;
 
                     var useWithDotTruncate = truncateWithDots?.Any(x => x == prop.Name) ?? false;
@@ -137,13 +137,14 @@ namespace EntityMaxLengthTrim.Interceptors
             {
                 var entityType = typeof(TEntity);
                 var prop = entityType.GetStringPropertyInfos().FirstOrDefault(x => x.Name.Equals(propertyName));
-                if (prop != null)
+                if (prop.IsNotNull())
                 {
-                    var currentValue = (string)prop.GetValue(entity, null);
+                    var currentValue = (string)prop!.GetValue(entity, null);
                     if (string.IsNullOrEmpty(currentValue)) return entity;
 
                     var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
-                    if (maxLength == null) return entity;
+                    if (maxLength.IsNull()) return entity;
+
                     if (!(currentValue.Length > maxLength)) return entity;
 
                     var newValue = currentValue.Truncate(maxLength.Value, useDots);
@@ -188,7 +189,7 @@ namespace EntityMaxLengthTrim.Interceptors
 
                     var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
 
-                    if (maxLength == null) continue;
+                    if (maxLength.IsNull()) continue;
                     if (!(currentValue.Length > maxLength)) continue;
 
                     var useWithDotTruncate = options?.FirstOrDefault(x => x.Name == prop.Name)?.UseDots ?? false;
@@ -203,6 +204,50 @@ namespace EntityMaxLengthTrim.Interceptors
             }
 
             return entity;
+        }
+        
+        /// <summary>
+        ///     Apply maximum allowed string length filter
+        /// </summary>
+        /// <param name="entity">Input entity</param>
+        /// <param name="propertyName">Property name</param>
+        /// <param name="useDots">
+        ///     If set to <see langword="true" />, then property value at the end will have dots (...);
+        ///     otherwise, value will be truncated at the allowed limit.
+        /// </param>
+        /// <returns>Processed/parsed property with new value</returns>
+        /// <typeparam name="TEntity">Current entity type</typeparam>
+        /// <remarks></remarks>
+        public static string ApplyPropStringMaxAllowedLength<TEntity>(TEntity entity, string propertyName,
+            bool useDots = true)
+        {
+            if (string.IsNullOrEmpty(propertyName)) return null;
+
+            try
+            {
+                var entityType = typeof(TEntity);
+                var prop = entityType.GetStringPropertyInfos().FirstOrDefault(x => x.Name.Equals(propertyName));
+                if (prop.IsNotNull())
+                {
+                    var currentValue = (string)prop!.GetValue(entity, null);
+                    if (string.IsNullOrEmpty(currentValue)) return currentValue;
+
+                    var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
+                    if (maxLength.IsNull()) return currentValue;
+                    if (!(currentValue.Length > maxLength)) return currentValue;
+
+                    var newValue = currentValue.Truncate(maxLength.Value, useDots);
+
+                    return newValue;
+                }
+            }
+            catch
+            {
+                // ignored
+                // In case of any error, return unmodified property
+            }
+
+            return null;
         }
     }
 }

@@ -48,15 +48,15 @@ namespace EntityMaxLengthTrim.Extensions
             try
             {
                 var length = propertyName.GetFromMaxLengthAttribute<T>();
-                if (length != null)
+                if (length.IsNotNull())
                     return length;
 
                 length = propertyName.GetFromStringLengthAttribute<T>();
-                if (length != null)
+                if (length.IsNotNull())
                     return length;
 
                 length = propertyName.GetFromMaxAllowedLengthAttribute<T>();
-                if (length != null)
+                if (length.IsNotNull())
                     return length;
             }
 #if DEBUG
