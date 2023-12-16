@@ -25,3 +25,7 @@
 
 ### **1.0.8.2220** 
 -> Fix wrong modification.<br />
+
+### **1.0.9.5667** 
+-> Add internal extension.<br />
+-> Add own implementation `EntityPropChangeEventBase` for `INotifyPropertyChanged` .<br />

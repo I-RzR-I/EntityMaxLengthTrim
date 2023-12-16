@@ -200,5 +200,20 @@ namespace EntityModelStringTruncateTest
             Assert.IsTrue(PropertyMaxLengthHelper.FullNameMaxLength >= data.FullName.Length);
             Assert.IsTrue(PropertyMaxLengthHelper.DescriptionMaxLength >= data.Description.Length);
         }
+
+        [Test]
+        public void Test8()
+        {
+            var data = new FooModelIntercept2()
+            {
+                Name = Constants.TextWithLength35,
+                FullName = Constants.TextWithLength35,
+                Description = Constants.TextWithLength575
+            };
+
+            Assert.IsTrue(PropertyMaxLengthHelper.NameMaxLength >= data.Name.Length);
+            Assert.IsTrue(PropertyMaxLengthHelper.FullNameMaxLength >= data.FullName.Length);
+            Assert.IsTrue(PropertyMaxLengthHelper.DescriptionMaxLength >= data.Description.Length);
+        }
     }
 }

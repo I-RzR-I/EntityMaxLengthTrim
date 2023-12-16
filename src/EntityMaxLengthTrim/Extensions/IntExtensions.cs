@@ -37,5 +37,16 @@ namespace EntityMaxLengthTrim.Extensions
         {
             return source.IsNull() || source == 0;
         }
+
+        /// <summary>
+        ///     Check if source object is less or equals with 0
+        /// </summary>
+        /// <param name="source">Source object to be checked</param>
+        /// <returns>Return bool value (validation result).</returns>
+        [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR", 1.0)]
+        internal static bool IsLessOrEqualWithZero(this int source)
+        {
+            return source <= 0;
+        }
     }
 }

@@ -45,8 +45,7 @@ namespace EntityMaxLengthTrim.Extensions
         {
             return StringInterceptor.ApplyStringMaxAllowedLength(initSourceObject, useDotOnEnd);
         }
-
-
+        
         /// <summary>
         ///     Prepare initialized object to save store string properties.
         /// </summary>

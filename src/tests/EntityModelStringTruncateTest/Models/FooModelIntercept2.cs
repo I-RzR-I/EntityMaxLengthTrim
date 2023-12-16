@@ -21,7 +21,7 @@ using EntityModelStringTruncateTest.Helpers;
 
 namespace EntityModelStringTruncateTest.Models
 {
-    public class FooModelIntercept : EntityPropChangeEventBase
+    public class FooModelIntercept2 : EntityPropChangeEventBase
     {
         private string _name;
         private string _fullName;
@@ -31,36 +31,21 @@ namespace EntityModelStringTruncateTest.Models
         public string Name
         {
             get => _name;
-            set
-            {
-                if (_name == value) return;
-                _name = value;
-                OnPropertyChanged(this, nameof(Name));
-            }
+            set => SetContent(this, nameof(Name), ref _name, ref value);
         }
 
         [StringLength(PropertyMaxLengthHelper.FullNameMaxLength)]
         public string FullName
         {
             get => _fullName;
-            set
-            {
-                if (_fullName == value) return;
-                _fullName = value;
-                OnPropertyChanged(this, nameof(FullName));
-            }
+            set => SetContent(this, nameof(FullName), ref _fullName, ref value);
         }
 
         [MaxAllowedLength(PropertyMaxLengthHelper.DescriptionMaxLength)]
         public string Description
         {
             get => _description;
-            set
-            {
-                if (_description == value) return;
-                _description = value;
-                OnPropertyChanged(this, nameof(Description));
-            }
+            set => SetContent(this, nameof(Description), ref _description, ref value);
         }
     }
 }
