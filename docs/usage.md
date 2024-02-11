@@ -117,4 +117,35 @@ public class Foo : INotifyPropertyChanged
 }
 ```
 
+Add own implementation of `EntityPropChangeEventBase` and methods to set content and activate property changed event.
+
+```csharp
+public class Foo : EntityPropChangeEventBase
+    {
+        private string _name;
+        private string _fullName;
+        private string _description;
+
+        [MaxLength(PropertyMaxLengthHelper.NameMaxLength)]
+        public string Name
+        {
+            get => _name;
+            set => SetContent(this, nameof(Name), ref _name, ref value);
+        }
+
+        [StringLength(PropertyMaxLengthHelper.FullNameMaxLength)]
+        public string FullName
+        {
+            get => _fullName;
+            set => SetContent(this, nameof(FullName), ref _fullName, ref value);
+        }
+
+        public string Description
+        {
+            get => _description;
+            set => SetContent(this, nameof(Description), ref _description, ref value, PropertyMaxLengthHelper.DescriptionMaxLength);
+        }
+    }
+```
+
 
