@@ -29,7 +29,7 @@ using System.Resources;
 
 [assembly: AssemblyCompany("RzR ®")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("Copyright © 2022-2023 RzR All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2022-2024 RzR All rights reserved.")]
 [assembly: AssemblyTrademark("® RzR™")]
 [assembly: AssemblyDescription("One important thing about this repository, you have the possibility to avoid database exceptions related to exceeding the limit of the maximum allowed length of the string type columns. To specify the maximum allowed string length you can use data annotation attributes predefined in `System.ComponentModel.DataAnnotations` or a new custom attribute.")]
 
@@ -44,6 +44,6 @@ using System.Resources;
 [assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.MainAssembly)]
 #endif
 
-[assembly: AssemblyVersion("1.0.9.5667")]
-[assembly: AssemblyFileVersion("1.0.9.5667")]
-[assembly: AssemblyInformationalVersion("1.0.9.5667")]
+[assembly: AssemblyVersion("1.0.10.3531")]
+[assembly: AssemblyFileVersion("1.0.10.3531")]
+[assembly: AssemblyInformationalVersion("1.0.10.3531")]

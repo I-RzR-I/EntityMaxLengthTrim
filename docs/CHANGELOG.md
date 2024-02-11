@@ -29,3 +29,6 @@
 ### **1.0.9.5667** 
 -> Add internal extension.<br />
 -> Add own implementation `EntityPropChangeEventBase` for `INotifyPropertyChanged` .<br />
+
+### **1.0.10.3531** 
+-> Add methods to set content `SetContent` with internal property changed event.<br />

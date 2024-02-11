@@ -41,11 +41,10 @@ namespace EntityModelStringTruncateTest.Models
             set => SetContent(this, nameof(FullName), ref _fullName, ref value);
         }
 
-        [MaxAllowedLength(PropertyMaxLengthHelper.DescriptionMaxLength)]
         public string Description
         {
             get => _description;
-            set => SetContent(this, nameof(Description), ref _description, ref value);
+            set => SetContent(this, nameof(Description), ref _description, ref value, PropertyMaxLengthHelper.DescriptionMaxLength);
         }
     }
 }

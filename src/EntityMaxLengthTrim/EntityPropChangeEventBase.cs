@@ -17,6 +17,7 @@
 #region U S A G E S
 
 using System.ComponentModel;
+using EntityMaxLengthTrim.Extensions;
 using EntityMaxLengthTrim.Interceptors;
 
 #endregion
@@ -62,6 +63,25 @@ namespace EntityMaxLengthTrim
 
             getValue = setValue;
             StringInterceptor.ApplyStringMaxAllowedLength(callingEntity, propertyName, false);
+            PropertyChanged?.Invoke(callingEntity, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        ///     Set content to property
+        /// </summary>
+        /// <param name="callingEntity">Calling entity</param>
+        /// <param name="propertyName">Changed property name</param>
+        /// <param name="getValue">Get property value</param>
+        /// <param name="setValue">Set property value</param>
+        /// <param name="length">Property maximum allowed length.</param>
+        /// <typeparam name="T">Calling entity type</typeparam>
+        /// <returns></returns>
+        protected virtual void SetContent<T>(T callingEntity, string propertyName, ref string getValue,
+            ref string setValue, int length)
+        {
+            if (getValue == setValue) return;
+
+            getValue = setValue.Truncate(length);
             PropertyChanged?.Invoke(callingEntity, new PropertyChangedEventArgs(propertyName));
         }
     }
