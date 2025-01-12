@@ -16,6 +16,7 @@
 
 #region U S A G E S
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using EntityMaxLengthTrim.Extensions;
@@ -42,8 +43,12 @@ namespace EntityMaxLengthTrim.Interceptors
         /// <returns>Processed/parsed entity with new values</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
         /// <remarks></remarks>
-        public static TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, bool useDotOnEnd = false)
+        public static TEntity ApplyStringMaxAllowedLength<TEntity>(
+            TEntity entity, 
+            bool useDotOnEnd = false)
+            where TEntity : class
         {
+            if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
             try
             {
                 var entityType = typeof(TEntity);
@@ -51,7 +56,7 @@ namespace EntityMaxLengthTrim.Interceptors
                 foreach (var prop in stringProperties)
                 {
                     var currentValue = (string)prop.GetValue(entity, null);
-                    if (string.IsNullOrEmpty(currentValue)) continue;
+                    if (!currentValue.IsPresent()) continue;
 
                     var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
 
@@ -83,9 +88,14 @@ namespace EntityMaxLengthTrim.Interceptors
         /// <returns>Processed/parsed entity with new values</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
         /// <remarks></remarks>
-        public static TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, IReadOnlyCollection<string> truncateWithDots,
+        public static TEntity ApplyStringMaxAllowedLength<TEntity>(
+            TEntity entity, 
+            IReadOnlyCollection<string> truncateWithDots,
             bool processOnlyAssigned = false)
+            where TEntity : class
         {
+            if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
+            if (truncateWithDots.IsNull()) throw new ArgumentNullException(nameof(truncateWithDots));
             try
             {
                 var entityType = typeof(TEntity);
@@ -95,7 +105,7 @@ namespace EntityMaxLengthTrim.Interceptors
                 foreach (var prop in stringProperties)
                 {
                     var currentValue = (string)prop.GetValue(entity, null);
-                    if (string.IsNullOrEmpty(currentValue)) continue;
+                    if (!currentValue.IsPresent()) continue;
 
                     var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
 
@@ -128,11 +138,14 @@ namespace EntityMaxLengthTrim.Interceptors
         /// <returns>Processed/parsed entity with new values</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
         /// <remarks></remarks>
-        public static TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, string propertyName,
+        public static TEntity ApplyStringMaxAllowedLength<TEntity>(
+            TEntity entity, 
+            string propertyName,
             bool useDots = true)
+            where TEntity : class
         {
+            if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
             if (string.IsNullOrEmpty(propertyName)) return entity;
-
             try
             {
                 var entityType = typeof(TEntity);
@@ -140,7 +153,7 @@ namespace EntityMaxLengthTrim.Interceptors
                 if (prop.IsNotNull())
                 {
                     var currentValue = (string)prop!.GetValue(entity, null);
-                    if (string.IsNullOrEmpty(currentValue)) return entity;
+                    if (!currentValue.IsPresent()) return entity;
 
                     var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
                     if (maxLength.IsNull()) return entity;
@@ -172,10 +185,14 @@ namespace EntityMaxLengthTrim.Interceptors
         /// <returns>Processed/parsed entity with new values</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
         /// <remarks></remarks>
-        public static TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity,
+        public static TEntity ApplyStringMaxAllowedLength<TEntity>(
+            TEntity entity,
             IReadOnlyCollection<PropertyOption> options,
             bool processOnlyAssigned = false)
+            where TEntity : class
         {
+            if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
+            if (options.IsNull()) throw new ArgumentNullException(nameof(options));
             try
             {
                 var entityType = typeof(TEntity);
@@ -185,7 +202,7 @@ namespace EntityMaxLengthTrim.Interceptors
                 foreach (var prop in stringProperties)
                 {
                     var currentValue = (string)prop.GetValue(entity, null);
-                    if (string.IsNullOrEmpty(currentValue)) continue;
+                    if (!currentValue.IsPresent()) continue;
 
                     var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
 
@@ -218,11 +235,14 @@ namespace EntityMaxLengthTrim.Interceptors
         /// <returns>Processed/parsed property with new value</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
         /// <remarks></remarks>
-        public static string ApplyPropStringMaxAllowedLength<TEntity>(TEntity entity, string propertyName,
+        public static string ApplyPropStringMaxAllowedLength<TEntity>(
+            TEntity entity, 
+            string propertyName,
             bool useDots = true)
+            where TEntity : class
         {
-            if (string.IsNullOrEmpty(propertyName)) return null;
-
+            if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
+            if (!propertyName.IsPresent()) return null;
             try
             {
                 var entityType = typeof(TEntity);
@@ -230,7 +250,7 @@ namespace EntityMaxLengthTrim.Interceptors
                 if (prop.IsNotNull())
                 {
                     var currentValue = (string)prop!.GetValue(entity, null);
-                    if (string.IsNullOrEmpty(currentValue)) return currentValue;
+                    if (!currentValue.IsPresent()) return currentValue;
 
                     var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
                     if (maxLength.IsNull()) return currentValue;

@@ -29,7 +29,7 @@ namespace EntityMaxLengthTrim
     /// <remarks></remarks>
     /// <seealso cref="System.ComponentModel.INotifyPropertyChanged" />
     /// =================================================================================================
-    public class EntityPropChangeEventBase : INotifyPropertyChanged
+    public abstract class EntityPropChangeEventBase : INotifyPropertyChanged
     {
         /// <summary>
         ///     Property changed event handler
@@ -41,7 +41,9 @@ namespace EntityMaxLengthTrim
         /// </summary>
         /// <param name="callingEntity">Calling entity</param>
         /// <param name="propertyName">Changed property name</param>
-        protected virtual void OnPropertyChanged<T>(T callingEntity, string propertyName)
+        /// <typeparam name="TEntity">Calling entity type</typeparam>
+        protected virtual void OnPropertyChanged<TEntity>(TEntity callingEntity, string propertyName)
+            where TEntity : class
         {
             StringInterceptor.ApplyStringMaxAllowedLength(callingEntity, propertyName, false);
             PropertyChanged?.Invoke(callingEntity, new PropertyChangedEventArgs(propertyName));
@@ -54,10 +56,11 @@ namespace EntityMaxLengthTrim
         /// <param name="propertyName">Changed property name</param>
         /// <param name="getValue">Get property value</param>
         /// <param name="setValue">Set property value</param>
-        /// <typeparam name="T">Calling entity type</typeparam>
+        /// <typeparam name="TEntity">Calling entity type</typeparam>
         /// <returns></returns>
-        protected virtual void SetContent<T>(T callingEntity, string propertyName, ref string getValue,
+        protected virtual void SetContent<TEntity>(TEntity callingEntity, string propertyName, ref string getValue,
             ref string setValue)
+            where TEntity : class
         {
             if (getValue == setValue) return;
 
@@ -74,10 +77,11 @@ namespace EntityMaxLengthTrim
         /// <param name="getValue">Get property value</param>
         /// <param name="setValue">Set property value</param>
         /// <param name="length">Property maximum allowed length.</param>
-        /// <typeparam name="T">Calling entity type</typeparam>
+        /// <typeparam name="TEntity">Calling entity type</typeparam>
         /// <returns></returns>
-        protected virtual void SetContent<T>(T callingEntity, string propertyName, ref string getValue,
+        protected virtual void SetContent<TEntity>(TEntity callingEntity, string propertyName, ref string getValue,
             ref string setValue, int length)
+            where TEntity : class
         {
             if (getValue == setValue) return;
 

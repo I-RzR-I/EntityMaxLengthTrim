@@ -31,4 +31,10 @@
 -> Add own implementation `EntityPropChangeEventBase` for `INotifyPropertyChanged` .<br />
 
 ### **1.0.10.3531** 
--> Add methods to set content `SetContent` with internal property changed event.<br />
+-> Add methods to set content `SetContent` with internal property changed event;<br />
+
+### **1.1.0.0** 
+-> Add small adjustments and fixes;<br />
+-> Small core reorganization;<br />
+-> Parameters rename;<br />
+-> Update the packages reference version;<br />
