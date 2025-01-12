@@ -43,19 +43,20 @@ namespace EntityMaxLengthTrim.Extensions
         /// <param name="propertyName">Property name</param>
         /// <returns>Return property length decorated with DatAnnotation</returns>
         /// <remarks>Decoration allowed attributes: MaxLengthAttribute or StringLengthAttribute or MaxAllowedLengthAttribute</remarks>
-        internal static int? GetMaxAllowedLength<T>(this string propertyName)
+        internal static int? GetMaxAllowedLength<TEntity>(this string propertyName)
+            where TEntity : class
         {
             try
             {
-                var length = propertyName.GetFromMaxLengthAttribute<T>();
+                var length = propertyName.GetFromMaxLengthAttribute<TEntity>();
                 if (length.IsNotNull())
                     return length;
 
-                length = propertyName.GetFromStringLengthAttribute<T>();
+                length = propertyName.GetFromStringLengthAttribute<TEntity>();
                 if (length.IsNotNull())
                     return length;
 
-                length = propertyName.GetFromMaxAllowedLengthAttribute<T>();
+                length = propertyName.GetFromMaxAllowedLengthAttribute<TEntity>();
                 if (length.IsNotNull())
                     return length;
             }
@@ -79,11 +80,12 @@ namespace EntityMaxLengthTrim.Extensions
         /// <param name="propertyName">Property name</param>
         /// <returns>Return property length decorated with MaxLengthAttribute</returns>
         /// <remarks>Return 'null' or '0' length in case of exception or not set property length value</remarks>
-        private static int? GetFromMaxLengthAttribute<T>(this string propertyName)
+        private static int? GetFromMaxLengthAttribute<TEntity>(this string propertyName)
+            where TEntity : class
         {
             try
             {
-                var length = typeof(T).GetProperty(propertyName)
+                var length = typeof(TEntity).GetProperty(propertyName)
                     ?.GetCustomAttributes(typeof(MaxLengthAttribute), false).Cast<MaxLengthAttribute>()
                     .FirstOrDefault();
 
@@ -98,11 +100,12 @@ namespace EntityMaxLengthTrim.Extensions
         /// <param name="propertyName">Property name</param>
         /// <returns>Return property length decorated with StringLengthAttribute</returns>
         /// <remarks>Return 'null' or '0' length in case of exception or not set property length value</remarks>
-        private static int? GetFromStringLengthAttribute<T>(this string propertyName)
+        private static int? GetFromStringLengthAttribute<TEntity>(this string propertyName)
+            where TEntity : class
         {
             try
             {
-                var length = typeof(T).GetProperty(propertyName)
+                var length = typeof(TEntity).GetProperty(propertyName)
                     ?.GetCustomAttributes(typeof(StringLengthAttribute), false).Cast<StringLengthAttribute>()
                     .FirstOrDefault();
 
@@ -117,11 +120,12 @@ namespace EntityMaxLengthTrim.Extensions
         /// <param name="propertyName">Property name</param>
         /// <returns>Return property length decorated with MaxAllowedLengthAttribute</returns>
         /// <remarks>Return 'null' or '0' length in case of exception or not set property length value</remarks>
-        private static int? GetFromMaxAllowedLengthAttribute<T>(this string propertyName)
+        private static int? GetFromMaxAllowedLengthAttribute<TEntity>(this string propertyName)
+        where TEntity : class
         {
             try
             {
-                var length = typeof(T).GetProperty(propertyName)
+                var length = typeof(TEntity).GetProperty(propertyName)
                     ?.GetCustomAttributes(typeof(MaxAllowedLengthAttribute), false).Cast<MaxAllowedLengthAttribute>()
                     .FirstOrDefault();
 

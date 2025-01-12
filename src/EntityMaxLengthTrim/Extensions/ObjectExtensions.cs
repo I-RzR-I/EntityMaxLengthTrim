@@ -33,10 +33,7 @@ namespace EntityMaxLengthTrim.Extensions
         /// <param name="source">Object to be checked</param>
         /// <returns>Return bool value (validation result).</returns>
         [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR", 1.0)]
-        internal static bool IsNull(this object source)
-        {
-            return source == null;
-        }
+        internal static bool IsNull(this object source) => source == null;
 
         /// <summary>
         ///     Check if the source object is not null
@@ -44,9 +41,6 @@ namespace EntityMaxLengthTrim.Extensions
         /// <param name="source">Object to be checked</param>
         /// <returns>Return bool value (validation result).</returns>
         [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR", 1.0)]
-        internal static bool IsNotNull(this object source)
-        {
-            return !source.IsNull();
-        }
+        internal static bool IsNotNull(this object source) => !source.IsNull();
     }
 }

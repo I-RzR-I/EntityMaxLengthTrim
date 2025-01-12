@@ -40,12 +40,12 @@ namespace EntityMaxLengthTrim.Extensions
         /// <returns></returns>
         /// <typeparam name="TEntity">Type of initialized object.</typeparam>
         /// <remarks></remarks>
-        public static TEntity ToSafeStoreStrings<TEntity>(this TEntity initSourceObject, bool useDotOnEnd = false)
+        public static TEntity ToSafeStoreStrings<TEntity>(
+            this TEntity initSourceObject,
+            bool useDotOnEnd = false)
             where TEntity : class
-        {
-            return StringInterceptor.ApplyStringMaxAllowedLength(initSourceObject, useDotOnEnd);
-        }
-        
+            => StringInterceptor.ApplyStringMaxAllowedLength(initSourceObject, useDotOnEnd);
+
         /// <summary>
         ///     Prepare initialized object to save store string properties.
         /// </summary>
@@ -61,13 +61,12 @@ namespace EntityMaxLengthTrim.Extensions
         /// <returns></returns>
         /// <typeparam name="TEntity">Type of initialized object.</typeparam>
         /// <remarks></remarks>
-        public static TEntity ToSafeStoreStrings<TEntity>(this TEntity initSourceObject,
+        public static TEntity ToSafeStoreStrings<TEntity>(
+            this TEntity initSourceObject,
             IReadOnlyCollection<string> truncateWithDots,
-            bool processOnlyAssigned = false) where TEntity : class
-        {
-            return StringInterceptor.ApplyStringMaxAllowedLength(initSourceObject, truncateWithDots,
-                processOnlyAssigned);
-        }
+            bool processOnlyAssigned = false)
+            where TEntity : class
+            => StringInterceptor.ApplyStringMaxAllowedLength(initSourceObject, truncateWithDots, processOnlyAssigned);
 
         /// <summary>
         ///     Prepare initialized object to save store string properties.
@@ -81,11 +80,11 @@ namespace EntityMaxLengthTrim.Extensions
         /// <returns></returns>
         /// <typeparam name="TEntity">Type of initialized object.</typeparam>
         /// <remarks></remarks>
-        public static TEntity ToSafeStoreStrings<TEntity>(this TEntity initSourceObject,
+        public static TEntity ToSafeStoreStrings<TEntity>(
+            this TEntity initSourceObject,
             IReadOnlyCollection<PropertyOption> options,
-            bool processOnlyAssigned = false) where TEntity : class
-        {
-            return StringInterceptor.ApplyStringMaxAllowedLength(initSourceObject, options, processOnlyAssigned);
-        }
+            bool processOnlyAssigned = false)
+            where TEntity : class
+            => StringInterceptor.ApplyStringMaxAllowedLength(initSourceObject, options, processOnlyAssigned);
     }
 }
