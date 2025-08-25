@@ -1,3 +1,10 @@
+### **v1.2.0.6745** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 25-08-2025
+* [f96dfff] (RzR) -> Reorganize the changlelog file.
+* [16a0796] (RzR) -> Adjust the documentation/using file.
+* [4d98d87] (RzR) -> Add new scripts for version and changelog build.
+* [820162a] (RzR) -> Adjust the ignore file list.
+* [184aba7] (RzR) -> Add new param (optional) for string truncate.
+
 ### **1.1.0.0** 
 -> Add small adjustments and fixes;<br />
 -> Small core reorganization;<br />
