@@ -14,10 +14,15 @@ This attribute has not applied any validation and is the extension for the `Attr
 
 In addition for more options in use, was added a few settings:
 ```csharp
-TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, bool useDotOnEnd = false);
-TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, IReadOnlyCollection<string> truncateWithDots, bool processOnlyAssigned = false);
-TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, string propertyName, bool useDots = true);
+TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, bool useDotOnEnd = false, StringTruncateType truncateType = StringTruncateType.AtTheEndOf);
+
+TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, IReadOnlyCollection<string> truncateWithDots, bool processOnlyAssigned = false, StringTruncateType truncateType = StringTruncateType.AtTheEndOf);
+
+TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, string propertyName, bool useDots = true, StringTruncateType truncateType = StringTruncateType.AtTheEndOf);
+
 TEntity ApplyStringMaxAllowedLength<TEntity>(TEntity entity, IReadOnlyCollection<PropertyOption> options, bool processOnlyAssigned = false);
+
+string ApplyPropStringMaxAllowedLength<TEntity>(TEntity entity, string propertyName, bool useDots = true, StringTruncateType truncateType = StringTruncateType.AtTheEndOf);
 ```
 
 ##### Data model:
