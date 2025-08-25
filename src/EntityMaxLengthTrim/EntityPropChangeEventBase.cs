@@ -17,6 +17,7 @@
 #region U S A G E S
 
 using System.ComponentModel;
+using EntityMaxLengthTrim.Enums;
 using EntityMaxLengthTrim.Extensions;
 using EntityMaxLengthTrim.Interceptors;
 
@@ -41,11 +42,17 @@ namespace EntityMaxLengthTrim
         /// </summary>
         /// <param name="callingEntity">Calling entity</param>
         /// <param name="propertyName">Changed property name</param>
+        /// <param name="truncateType">
+        ///     (Optional) Type of the truncate. 
+        ///     Truncate string from the beginning or at the end.
+        /// </param>
         /// <typeparam name="TEntity">Calling entity type</typeparam>
-        protected virtual void OnPropertyChanged<TEntity>(TEntity callingEntity, string propertyName)
+        protected virtual void OnPropertyChanged<TEntity>(TEntity callingEntity, string propertyName,
+            StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
         {
-            StringInterceptor.ApplyStringMaxAllowedLength(callingEntity, propertyName, false);
+            StringInterceptor.ApplyStringMaxAllowedLength(callingEntity, propertyName, false, truncateType);
+
             PropertyChanged?.Invoke(callingEntity, new PropertyChangedEventArgs(propertyName));
         }
 
@@ -56,16 +63,21 @@ namespace EntityMaxLengthTrim
         /// <param name="propertyName">Changed property name</param>
         /// <param name="getValue">Get property value</param>
         /// <param name="setValue">Set property value</param>
+        /// <param name="truncateType">
+        ///     (Optional) Type of the truncate.
+        ///     Truncate string from the beginning or at the end.
+        /// </param>
         /// <typeparam name="TEntity">Calling entity type</typeparam>
         /// <returns></returns>
         protected virtual void SetContent<TEntity>(TEntity callingEntity, string propertyName, ref string getValue,
-            ref string setValue)
+            ref string setValue, StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
         {
             if (getValue == setValue) return;
 
             getValue = setValue;
-            StringInterceptor.ApplyStringMaxAllowedLength(callingEntity, propertyName, false);
+            StringInterceptor.ApplyStringMaxAllowedLength(callingEntity, propertyName, false, truncateType);
+
             PropertyChanged?.Invoke(callingEntity, new PropertyChangedEventArgs(propertyName));
         }
 
@@ -77,15 +89,22 @@ namespace EntityMaxLengthTrim
         /// <param name="getValue">Get property value</param>
         /// <param name="setValue">Set property value</param>
         /// <param name="length">Property maximum allowed length.</param>
+        /// <param name="truncateType">
+        ///     (Optional) Type of the truncate.
+        ///     Truncate string from the beginning or at the end.
+        /// </param>
         /// <typeparam name="TEntity">Calling entity type</typeparam>
         /// <returns></returns>
         protected virtual void SetContent<TEntity>(TEntity callingEntity, string propertyName, ref string getValue,
-            ref string setValue, int length)
+            ref string setValue, int length, StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
         {
             if (getValue == setValue) return;
 
-            getValue = setValue.Truncate(length);
+            getValue = truncateType == StringTruncateType.AtTheEndOf 
+                ? setValue.Truncate(length) 
+                : setValue.TruncateAtStart(length);
+
             PropertyChanged?.Invoke(callingEntity, new PropertyChangedEventArgs(propertyName));
         }
     }

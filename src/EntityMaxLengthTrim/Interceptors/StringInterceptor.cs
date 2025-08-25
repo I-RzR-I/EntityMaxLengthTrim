@@ -16,11 +16,12 @@
 
 #region U S A G E S
 
+using EntityMaxLengthTrim.Enums;
+using EntityMaxLengthTrim.Extensions;
+using EntityMaxLengthTrim.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using EntityMaxLengthTrim.Extensions;
-using EntityMaxLengthTrim.Options;
 
 #endregion
 
@@ -40,12 +41,17 @@ namespace EntityMaxLengthTrim.Interceptors
         ///     Optional. The default value is false.If set to <see langword="true" />, then at the end of
         ///     the string u will see (...); otherwise, string will be truncated.
         /// </param>
+        /// <param name="truncateType">
+        ///     (Optional) Type of the truncate.
+        ///     Truncate string from the beginning or at the end.
+        /// </param>
         /// <returns>Processed/parsed entity with new values</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
         /// <remarks></remarks>
         public static TEntity ApplyStringMaxAllowedLength<TEntity>(
-            TEntity entity, 
-            bool useDotOnEnd = false)
+            TEntity entity,
+            bool useDotOnEnd = false,
+            StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
         {
             if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
@@ -63,7 +69,10 @@ namespace EntityMaxLengthTrim.Interceptors
                     if (maxLength.IsNull()) continue;
                     if (!(currentValue.Length > maxLength)) continue;
 
-                    var newValue = currentValue.Truncate(maxLength.Value, useDotOnEnd);
+                    var newValue = truncateType == StringTruncateType.AtTheEndOf
+                        ? currentValue.Truncate(maxLength.Value, useDotOnEnd)
+                        : currentValue.TruncateAtStart(maxLength.Value, useDotOnEnd);
+
                     prop.SetValue(entity, newValue, null);
                 }
             }
@@ -85,13 +94,18 @@ namespace EntityMaxLengthTrim.Interceptors
         ///     the all string list u will see (...).
         /// </param>
         /// <param name="processOnlyAssigned">Process only properties from param 'truncateWithDots'</param>
+        /// <param name="truncateType">
+        ///     (Optional) Type of the truncate.
+        ///     Truncate string from the beginning or at the end.
+        /// </param>
         /// <returns>Processed/parsed entity with new values</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
         /// <remarks></remarks>
         public static TEntity ApplyStringMaxAllowedLength<TEntity>(
-            TEntity entity, 
+            TEntity entity,
             IReadOnlyCollection<string> truncateWithDots,
-            bool processOnlyAssigned = false)
+            bool processOnlyAssigned = false,
+            StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
         {
             if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
@@ -113,7 +127,10 @@ namespace EntityMaxLengthTrim.Interceptors
                     if (!(currentValue.Length > maxLength)) continue;
 
                     var useWithDotTruncate = truncateWithDots?.Any(x => x == prop.Name) ?? false;
-                    var newValue = currentValue.Truncate(maxLength.Value, useWithDotTruncate);
+                    var newValue = truncateType == StringTruncateType.AtTheEndOf
+                        ? currentValue.Truncate(maxLength.Value, useWithDotTruncate)
+                        : currentValue.TruncateAtStart(maxLength.Value, useWithDotTruncate);
+
                     prop.SetValue(entity, newValue, null);
                 }
             }
@@ -135,13 +152,18 @@ namespace EntityMaxLengthTrim.Interceptors
         ///     If set to <see langword="true" />, then property value at the end will have dots (...);
         ///     otherwise, value will be truncated at the allowed limit.
         /// </param>
+        /// <param name="truncateType">
+        ///     (Optional) Type of the truncate.
+        ///     Truncate string from the beginning or at the end.
+        /// </param>
         /// <returns>Processed/parsed entity with new values</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
         /// <remarks></remarks>
         public static TEntity ApplyStringMaxAllowedLength<TEntity>(
-            TEntity entity, 
+            TEntity entity,
             string propertyName,
-            bool useDots = true)
+            bool useDots = true,
+            StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
         {
             if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
@@ -160,7 +182,10 @@ namespace EntityMaxLengthTrim.Interceptors
 
                     if (!(currentValue.Length > maxLength)) return entity;
 
-                    var newValue = currentValue.Truncate(maxLength.Value, useDots);
+                    var newValue = truncateType == StringTruncateType.AtTheEndOf
+                        ? currentValue.Truncate(maxLength.Value, useDots)
+                        : currentValue.TruncateAtStart(maxLength.Value, useDots);
+
                     prop.SetValue(entity, newValue, null);
                 }
             }
@@ -210,7 +235,12 @@ namespace EntityMaxLengthTrim.Interceptors
                     if (!(currentValue.Length > maxLength)) continue;
 
                     var useWithDotTruncate = options?.FirstOrDefault(x => x.Name == prop.Name)?.UseDots ?? false;
-                    var newValue = currentValue.Truncate(maxLength.Value, useWithDotTruncate);
+                    var truncateType  = options?.FirstOrDefault(x => x.Name == prop.Name)?.TruncateType ?? StringTruncateType.AtTheEndOf;
+                    
+                    var newValue = truncateType == StringTruncateType.AtTheEndOf
+                        ? currentValue.Truncate(maxLength.Value, useWithDotTruncate)
+                        : currentValue.TruncateAtStart(maxLength.Value, useWithDotTruncate);
+
                     prop.SetValue(entity, newValue, null);
                 }
             }
@@ -222,7 +252,7 @@ namespace EntityMaxLengthTrim.Interceptors
 
             return entity;
         }
-        
+
         /// <summary>
         ///     Apply maximum allowed string length filter
         /// </summary>
@@ -232,13 +262,18 @@ namespace EntityMaxLengthTrim.Interceptors
         ///     If set to <see langword="true" />, then property value at the end will have dots (...);
         ///     otherwise, value will be truncated at the allowed limit.
         /// </param>
+        /// <param name="truncateType">
+        ///     (Optional) Type of the truncate. 
+        ///     Truncate string from the beginning or at the end.
+        /// </param>
         /// <returns>Processed/parsed property with new value</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
         /// <remarks></remarks>
         public static string ApplyPropStringMaxAllowedLength<TEntity>(
-            TEntity entity, 
+            TEntity entity,
             string propertyName,
-            bool useDots = true)
+            bool useDots = true,
+            StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
         {
             if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
@@ -256,7 +291,9 @@ namespace EntityMaxLengthTrim.Interceptors
                     if (maxLength.IsNull()) return currentValue;
                     if (!(currentValue.Length > maxLength)) return currentValue;
 
-                    var newValue = currentValue.Truncate(maxLength.Value, useDots);
+                    var newValue = truncateType == StringTruncateType.AtTheEndOf
+                        ? currentValue.Truncate(maxLength.Value, useDots)
+                        : currentValue.TruncateAtStart(maxLength.Value, useDots);
 
                     return newValue;
                 }
