@@ -64,5 +64,35 @@ namespace EntityMaxLengthTrim.Extensions
 
             return truncatedString;
         }
+
+
+        /// <summary>
+        ///     Truncates the string to a specified length and replace the truncated to a ...
+        /// </summary>
+        /// <param name="text">String that will be truncated</param>
+        /// <param name="maxLength">Total length of characters to maintain before the truncate happens</param>
+        /// <param name="useDots">Use 3 dots(...) in the start of string</param>
+        /// <returns>Truncated string</returns>
+        [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR", "RzR", "2025-08-25")]
+        internal static string TruncateAtStart(this string text, int maxLength, bool useDots = false)
+        {
+            const string prefix = "...";
+            var truncatedString = text ?? string.Empty;
+
+            if (maxLength.IsLessOrEqualWithZero()) return truncatedString;
+            var strLength = maxLength - (useDots.Equals(true) ? prefix.Length : 0);
+
+            if (strLength.IsLessOrEqualWithZero()) return truncatedString;
+
+            if (!text.IsPresent() || text!.Length <= maxLength) return truncatedString;
+
+            truncatedString = text.Substring(text.Length - strLength, strLength);
+            truncatedString = truncatedString.TrimEnd();
+
+            if (useDots.Equals(true))
+                return prefix + truncatedString;
+
+            return truncatedString;
+        }
     }
 }

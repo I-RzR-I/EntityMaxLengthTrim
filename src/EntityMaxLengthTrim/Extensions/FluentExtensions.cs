@@ -17,6 +17,7 @@
 #region U S A G E S
 
 using System.Collections.Generic;
+using EntityMaxLengthTrim.Enums;
 using EntityMaxLengthTrim.Interceptors;
 using EntityMaxLengthTrim.Options;
 
@@ -37,14 +38,19 @@ namespace EntityMaxLengthTrim.Extensions
         ///     Optional. The default value is false. If set to <see langword="true" />, then ant the end of
         ///     string prop will be '...'; otherwise, truncate to max length.
         /// </param>
+        /// <param name="truncateType">
+        ///     (Optional) Type of the truncate.
+        ///     Truncate string from the beginning or at the end.
+        /// </param>
         /// <returns></returns>
         /// <typeparam name="TEntity">Type of initialized object.</typeparam>
         /// <remarks></remarks>
         public static TEntity ToSafeStoreStrings<TEntity>(
             this TEntity initSourceObject,
-            bool useDotOnEnd = false)
+            bool useDotOnEnd = false,
+            StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
-            => StringInterceptor.ApplyStringMaxAllowedLength(initSourceObject, useDotOnEnd);
+            => StringInterceptor.ApplyStringMaxAllowedLength(initSourceObject, useDotOnEnd, truncateType);
 
         /// <summary>
         ///     Prepare initialized object to save store string properties.
@@ -58,15 +64,20 @@ namespace EntityMaxLengthTrim.Extensions
         ///     Optional. The default value is false.If set to <see langword="true" />, then
         ///     process only specified props; otherwise, process all props.
         /// </param>
+        /// <param name="truncateType">
+        ///     (Optional) Type of the truncate.
+        ///     Truncate string from the beginning or at the end.
+        /// </param>
         /// <returns></returns>
         /// <typeparam name="TEntity">Type of initialized object.</typeparam>
         /// <remarks></remarks>
         public static TEntity ToSafeStoreStrings<TEntity>(
             this TEntity initSourceObject,
             IReadOnlyCollection<string> truncateWithDots,
-            bool processOnlyAssigned = false)
+            bool processOnlyAssigned = false,
+            StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
-            => StringInterceptor.ApplyStringMaxAllowedLength(initSourceObject, truncateWithDots, processOnlyAssigned);
+            => StringInterceptor.ApplyStringMaxAllowedLength(initSourceObject, truncateWithDots, processOnlyAssigned, truncateType);
 
         /// <summary>
         ///     Prepare initialized object to save store string properties.

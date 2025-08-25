@@ -14,7 +14,14 @@
 //  </summary>
 // ***********************************************************************
 
+#region U S A G E S
+
+using EntityMaxLengthTrim.Enums;
+
 // ReSharper disable ClassNeverInstantiated.Global
+
+#endregion
+
 namespace EntityMaxLengthTrim.Options
 {
     /// <summary>
@@ -38,5 +45,14 @@ namespace EntityMaxLengthTrim.Options
         /// </value>
         /// <remarks>Bool value</remarks>
         public bool UseDots { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the type of the truncate.
+        /// </summary>
+        /// <value>
+        ///     The type of the truncate.
+        ///     Default value is truncate at the end of the string.
+        /// </value>
+        public StringTruncateType TruncateType { get; set; } = StringTruncateType.AtTheEndOf;
     }
 }
