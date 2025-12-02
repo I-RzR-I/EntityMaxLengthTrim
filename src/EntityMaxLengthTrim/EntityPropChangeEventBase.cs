@@ -18,7 +18,7 @@
 
 using System.ComponentModel;
 using EntityMaxLengthTrim.Enums;
-using EntityMaxLengthTrim.Extensions;
+using EntityMaxLengthTrim.Extensions.Internal;
 using EntityMaxLengthTrim.Interceptors;
 
 #endregion

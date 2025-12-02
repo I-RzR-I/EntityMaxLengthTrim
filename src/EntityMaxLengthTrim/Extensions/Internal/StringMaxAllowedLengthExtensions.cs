@@ -21,6 +21,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using EntityMaxLengthTrim.Attributes;
+
+
 #if DEBUG
 #endif
 #if NETSTANDARD1_5
@@ -29,7 +31,7 @@ using System.Reflection;
 
 #endregion
 
-namespace EntityMaxLengthTrim.Extensions
+namespace EntityMaxLengthTrim.Extensions.Internal
 {
     /// <summary>
     ///     Maximum allowed length for string type extensions

@@ -38,7 +38,7 @@ namespace EntityMaxLengthTrim.Options
         public string Name { get; set; }
 
         /// <summary>
-        ///     Gets or sets a value indicating whether use dots on the end of string.
+        ///     Gets or sets a value indicating whether to use dots on the end of the string.
         /// </summary>
         /// <value>
         ///     <see langword="true" /> if at the end of the string will be set (...); otherwise, <see langword="false" />.

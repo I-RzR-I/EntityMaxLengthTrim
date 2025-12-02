@@ -1,3 +1,7 @@
+### **v1.3.0.8142** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 02-12-2025
+* [29782c9] (RzR) -> Auto commit uncommited files
+* [b58d384] (RzR) -> Add new interceptor method based on trim options.
+
 ### **v1.2.0.6745** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 25-08-2025
 * [f96dfff] (RzR) -> Reorganize the changlelog file.
 * [16a0796] (RzR) -> Adjust the documentation/using file.
