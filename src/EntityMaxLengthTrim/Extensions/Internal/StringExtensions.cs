@@ -20,7 +20,7 @@ using CodeSource;
 
 #endregion
 
-namespace EntityMaxLengthTrim.Extensions
+namespace EntityMaxLengthTrim.Extensions.Internal
 {
     /// <summary>
     ///     Local string extensions

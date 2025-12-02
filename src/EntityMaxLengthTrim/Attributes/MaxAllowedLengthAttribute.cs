@@ -17,7 +17,7 @@
 #region U S A G E S
 
 using System;
-using EntityMaxLengthTrim.Extensions;
+using EntityMaxLengthTrim.Extensions.Internal;
 
 #endregion
 

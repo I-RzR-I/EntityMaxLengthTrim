@@ -24,7 +24,7 @@ using CodeSource;
 
 #endregion
 
-namespace EntityMaxLengthTrim.Extensions
+namespace EntityMaxLengthTrim.Extensions.Internal
 {
     /// <summary>
     ///     Type extensions
@@ -59,7 +59,7 @@ namespace EntityMaxLengthTrim.Extensions
         {
             try
             {
-                var properties = GetPropertyInfos(type)?
+                var properties = type.GetPropertyInfos()?
                     .Where(x => x.PropertyType == typeof(string)).ToList();
 
                 return properties;
@@ -77,7 +77,7 @@ namespace EntityMaxLengthTrim.Extensions
         {
             try
             {
-                var properties = GetStringPropertyInfos(type)?
+                var properties = type.GetStringPropertyInfos()?
                     .Where(x => x.PropertyType == typeof(string))
                     .Select(x => x.Name)
                     .ToList();

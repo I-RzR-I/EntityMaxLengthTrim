@@ -17,7 +17,7 @@
 #region U S A G E S
 
 using EntityMaxLengthTrim.Enums;
-using EntityMaxLengthTrim.Extensions;
+using EntityMaxLengthTrim.Extensions.Internal;
 using EntityMaxLengthTrim.Options;
 using System;
 using System.Collections.Generic;
@@ -74,6 +74,83 @@ namespace EntityMaxLengthTrim.Interceptors
                         : currentValue.TruncateAtStart(maxLength.Value, useDotOnEnd);
 
                     prop.SetValue(entity, newValue, null);
+                }
+            }
+            catch
+            {
+                // ignored
+                // In case of any error, return unmodified entity
+            }
+
+            return entity;
+        }
+
+        /// -------------------------------------------------------------------------------------------------
+        /// <summary>
+        ///     Apply maximum allowed string length filter.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when one or more required arguments are null.
+        /// </exception>
+        /// <exception cref="InvalidOperationException">
+        ///     Thrown when the requested operation is invalid.
+        /// </exception>
+        /// <typeparam name="TEntity">Type of the entity.</typeparam>
+        /// <param name="entity">Input entity.</param>
+        /// <param name="trimOption">The trim option.</param>
+        /// <returns>
+        ///     Processed/parsed entity with new values.
+        /// </returns>
+        /// =================================================================================================
+        public static TEntity ApplyStringMaxAllowedLength<TEntity>(
+            TEntity entity,
+            TrimOption trimOption)
+            where TEntity : class
+        {
+            if (entity.IsNull())
+                throw new ArgumentNullException(nameof(entity));
+            if (trimOption.IsNull())
+                trimOption = new TrimOption();
+            try
+            {
+                var entityType = typeof(TEntity);
+                var stringProperties = entityType.GetStringPropertyInfos();
+                foreach (var prop in stringProperties)
+                {
+                    var currentValue = (string)prop.GetValue(entity, null);
+                    if (!currentValue.IsPresent()) continue;
+
+                    var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
+
+                    if (maxLength.IsNull()) continue;
+                    if (!(currentValue.Length > maxLength)) continue;
+                    
+                    var newValue = trimOption.TruncateType == StringTruncateType.AtTheEndOf
+                        ? currentValue.Truncate(maxLength.Value, trimOption.UseDots)
+                        : currentValue.TruncateAtStart(maxLength.Value, trimOption.UseDots);
+
+                    var ctx = new TrimContext(entityType.Name, prop.Name, currentValue, newValue, maxLength);
+
+                    switch (trimOption.Policy)
+                    {
+                        case TrimPolicy.Silent:
+                            prop.SetValue(entity, newValue, null);
+                            break;
+                        case TrimPolicy.Warn:
+                            trimOption.Logger?.Invoke(ctx);
+                            prop.SetValue(entity, newValue, null);
+                            break;
+                        case TrimPolicy.Throw:
+                            throw new InvalidOperationException($"Property '{ctx.PropertyName}' on entity '{ctx.Entity}' " +
+                                                                $"exceeded max length {maxLength} (original {currentValue.Length}).");
+                            break;
+                        case TrimPolicy.ReportOnly:
+                            trimOption.Logger?.Invoke(ctx);
+                            break;
+                        default:
+                            prop.SetValue(entity, newValue, null);
+                            break;
+                    }
                 }
             }
             catch
@@ -235,8 +312,8 @@ namespace EntityMaxLengthTrim.Interceptors
                     if (!(currentValue.Length > maxLength)) continue;
 
                     var useWithDotTruncate = options?.FirstOrDefault(x => x.Name == prop.Name)?.UseDots ?? false;
-                    var truncateType  = options?.FirstOrDefault(x => x.Name == prop.Name)?.TruncateType ?? StringTruncateType.AtTheEndOf;
-                    
+                    var truncateType = options?.FirstOrDefault(x => x.Name == prop.Name)?.TruncateType ?? StringTruncateType.AtTheEndOf;
+
                     var newValue = truncateType == StringTruncateType.AtTheEndOf
                         ? currentValue.Truncate(maxLength.Value, useWithDotTruncate)
                         : currentValue.TruncateAtStart(maxLength.Value, useWithDotTruncate);
