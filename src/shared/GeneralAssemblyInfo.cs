@@ -44,6 +44,6 @@ using System.Resources;
 [assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.MainAssembly)]
 #endif
 
-[assembly: AssemblyVersion("1.3.0.8142")]
-[assembly: AssemblyFileVersion("1.3.0.8142")]
-[assembly: AssemblyInformationalVersion("1.3.0.8142")]
+[assembly: AssemblyVersion("1.3.1.5535")]
+[assembly: AssemblyFileVersion("1.3.1.5535")]
+[assembly: AssemblyInformationalVersion("1.3.1.5535")]
