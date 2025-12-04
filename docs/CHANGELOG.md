@@ -1,3 +1,7 @@
+### **v1.3.1.5535** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 04-12-2025
+* [66989b8] (RzR) -> Auto commit uncommited files
+* [229c8ea] (RzR) -> Upgrade deprecated package version.
+
 ### **v1.3.0.8142** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 02-12-2025
 * [29782c9] (RzR) -> Auto commit uncommited files
 * [b58d384] (RzR) -> Add new interceptor method based on trim options.
