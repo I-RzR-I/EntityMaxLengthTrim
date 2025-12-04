@@ -1,3 +1,6 @@
+### **v1.3.2.5621** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 04-12-2025
+* [fef303e] (RzR) -> Upgrade deprecated package version.
+
 ### **v1.3.1.5535** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 04-12-2025
 * [66989b8] (RzR) -> Auto commit uncommited files
 * [229c8ea] (RzR) -> Upgrade deprecated package version.
