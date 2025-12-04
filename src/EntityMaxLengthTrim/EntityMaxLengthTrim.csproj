@@ -50,7 +50,7 @@
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
     <PackageReference Include="CodeSource">
-      <Version>4.0.0.2838</Version>
+      <Version>4.0.2.4672</Version>
     </PackageReference>
     <PackageReference Include="System.ComponentModel.Annotations">
       <Version>5.0</Version>
