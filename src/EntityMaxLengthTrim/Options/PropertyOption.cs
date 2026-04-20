@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.EntityMaxLengthTrim
+//  Assembly         : RzR.Extensions.EntityLength
 //  Author           : RzR
 //  Created On       : 2022-09-26 06:35
 // 
@@ -16,13 +16,13 @@
 
 #region U S A G E S
 
-using EntityMaxLengthTrim.Enums;
+using RzR.Extensions.EntityLength.Enums;
 
 // ReSharper disable ClassNeverInstantiated.Global
 
 #endregion
 
-namespace EntityMaxLengthTrim.Options
+namespace RzR.Extensions.EntityLength.Options
 {
     /// <summary>
     ///     Property option

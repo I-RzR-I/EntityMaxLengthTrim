@@ -19,8 +19,8 @@
 using System;
 using System.Collections.Generic;
 using ConsoleFramework45Test.Models;
-using EntityMaxLengthTrim.Interceptors;
-using EntityMaxLengthTrim.Options;
+using RzR.Extensions.EntityLength.Interceptors;
+using RzR.Extensions.EntityLength.Options;
 
 #endregion
 

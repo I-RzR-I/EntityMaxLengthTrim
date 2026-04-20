@@ -17,11 +17,11 @@
 #region U S A G E S
 
 using System.Collections.Generic;
-using EntityMaxLengthTrim.Extensions;
-using EntityMaxLengthTrim.Options;
 using EntityModelStringTruncateTest.Helpers;
 using EntityModelStringTruncateTest.Models;
 using NUnit.Framework;
+using RzR.Extensions.EntityLength.Extensions;
+using RzR.Extensions.EntityLength.Options;
 
 #endregion
 

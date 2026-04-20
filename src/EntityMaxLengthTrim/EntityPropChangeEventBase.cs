@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.EntityMaxLengthTrim
+//  Assembly         : RzR.Extensions.EntityLength
 //  Author           : RzR
 //  Created On       : 2023-12-15 14:32
 // 
@@ -17,13 +17,13 @@
 #region U S A G E S
 
 using System.ComponentModel;
-using EntityMaxLengthTrim.Enums;
-using EntityMaxLengthTrim.Extensions.Internal;
-using EntityMaxLengthTrim.Interceptors;
+using RzR.Extensions.EntityLength.Enums;
+using RzR.Extensions.EntityLength.Extensions.Internal;
+using RzR.Extensions.EntityLength.Interceptors;
 
 #endregion
 
-namespace EntityMaxLengthTrim
+namespace RzR.Extensions.EntityLength
 {
     /// -------------------------------------------------------------------------------------------------
     /// <summary>An entity property change event base.</summary>

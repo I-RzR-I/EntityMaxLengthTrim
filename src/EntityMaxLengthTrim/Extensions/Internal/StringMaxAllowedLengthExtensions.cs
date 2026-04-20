@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.EntityMaxLengthTrim
+//  Assembly         : RzR.Extensions.EntityLength
 //  Author           : RzR
 //  Created On       : 2022-09-23 08:38
 // 
@@ -20,9 +20,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
-using EntityMaxLengthTrim.Attributes;
-
-
+using RzR.Extensions.EntityLength.Attributes;
 #if DEBUG
 #endif
 #if NETSTANDARD1_5
@@ -31,7 +29,7 @@ using System.Reflection;
 
 #endregion
 
-namespace EntityMaxLengthTrim.Extensions.Internal
+namespace RzR.Extensions.EntityLength.Extensions.Internal
 {
     /// <summary>
     ///     Maximum allowed length for string type extensions

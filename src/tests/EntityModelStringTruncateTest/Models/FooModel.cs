@@ -17,8 +17,8 @@
 #region U S A G E S
 
 using System.ComponentModel.DataAnnotations;
-using EntityMaxLengthTrim.Attributes;
 using EntityModelStringTruncateTest.Helpers;
+using RzR.Extensions.EntityLength.Attributes;
 
 #endregion
 

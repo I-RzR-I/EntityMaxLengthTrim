@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.EntityMaxLengthTrim
+//  Assembly         : RzR.Extensions.EntityLength
 //  Author           : RzR
 //  Created On       : 2023-10-04 12:33
 // 
@@ -16,11 +16,11 @@
 
 #region U S A G E S
 
-using CodeSource;
+using RzR.Core.CodeSource;
 
 #endregion
 
-namespace EntityMaxLengthTrim.Extensions.Internal
+namespace RzR.Extensions.EntityLength.Extensions.Internal
 {
     /// <summary>
     ///     Int32 extensions
@@ -32,7 +32,7 @@ namespace EntityMaxLengthTrim.Extensions.Internal
         /// </summary>
         /// <param name="source">Source object to be checked</param>
         /// <returns>Return bool value (validation result).</returns>
-        [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR", 1.0)]
+        [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR", "1.0")]
         internal static bool IsNullOrZero(this int source) => source.IsNull() || source == 0;
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace EntityMaxLengthTrim.Extensions.Internal
         /// </summary>
         /// <param name="source">Source object to be checked</param>
         /// <returns>Return bool value (validation result).</returns>
-        [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR", 1.0)]
+        [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR", "1.0")]
         internal static bool IsLessOrEqualWithZero(this int source) => source <= 0;
     }
 }

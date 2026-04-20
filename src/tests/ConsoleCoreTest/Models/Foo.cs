@@ -17,7 +17,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using ConsoleCoreTest.Helpers;
-using EntityMaxLengthTrim.Attributes;
+using RzR.Extensions.EntityLength.Attributes;
 
 namespace ConsoleCoreTest.Models
 {

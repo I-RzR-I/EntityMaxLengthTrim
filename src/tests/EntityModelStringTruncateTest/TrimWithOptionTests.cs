@@ -19,11 +19,10 @@
 using EntityModelStringTruncateTest.Models;
 using NUnit.Framework;
 using System.Collections.Generic;
-using EntityMaxLengthTrim.Enums;
-using EntityMaxLengthTrim.Extensions;
-using EntityMaxLengthTrim.Interceptors;
-using EntityMaxLengthTrim.Options;
 using EntityModelStringTruncateTest.Helpers;
+using RzR.Extensions.EntityLength.Enums;
+using RzR.Extensions.EntityLength.Interceptors;
+using RzR.Extensions.EntityLength.Options;
 
 #endregion
 

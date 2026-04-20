@@ -19,7 +19,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using ConsoleFrameworkTest.Helpers;
-using EntityMaxLengthTrim.Attributes;
+using RzR.Extensions.EntityLength.Attributes;
 
 #endregion
 

@@ -15,9 +15,8 @@
 // ***********************************************************************
 
 using System.ComponentModel.DataAnnotations;
-using EntityMaxLengthTrim;
-using EntityMaxLengthTrim.Attributes;
 using EntityModelStringTruncateTest.Helpers;
+using RzR.Extensions.EntityLength;
 
 namespace EntityModelStringTruncateTest.Models
 {

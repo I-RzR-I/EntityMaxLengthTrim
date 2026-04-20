@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.EntityMaxLengthTrim
+//  Assembly         : RzR.Extensions.EntityLength
 //  Author           : RzR
 //  Created On       : 2022-09-24 03:55
 // 
@@ -16,16 +16,16 @@
 
 #region U S A G E S
 
-using EntityMaxLengthTrim.Enums;
-using EntityMaxLengthTrim.Extensions.Internal;
-using EntityMaxLengthTrim.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RzR.Extensions.EntityLength.Enums;
+using RzR.Extensions.EntityLength.Extensions.Internal;
+using RzR.Extensions.EntityLength.Options;
 
 #endregion
 
-namespace EntityMaxLengthTrim.Interceptors
+namespace RzR.Extensions.EntityLength.Interceptors
 {
     /// <summary>
     ///     String interceptor

@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.EntityMaxLengthTrim
+//  Assembly         : RzR.Extensions.EntityLength
 //  Author           : RzR
 //  Created On       : 2022-09-24 02:47
 // 
@@ -17,11 +17,11 @@
 #region U S A G E S
 
 using System;
-using EntityMaxLengthTrim.Extensions.Internal;
+using RzR.Extensions.EntityLength.Extensions.Internal;
 
 #endregion
 
-namespace EntityMaxLengthTrim.Attributes
+namespace RzR.Extensions.EntityLength.Attributes
 {
     /// <summary>
     ///     Maximum allowed string length attribute
@@ -38,7 +38,7 @@ namespace EntityMaxLengthTrim.Attributes
         public int MaxLength { get; }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="EntityMaxLengthTrim.Attributes.MaxAllowedLengthAttribute" /> class.
+        ///     Initializes a new instance of the <see cref="MaxAllowedLengthAttribute" /> class.
         /// </summary>
         /// <param name="maxLength">Maximum allows string length</param>
         /// <remarks>Initialize property maximum length</remarks>

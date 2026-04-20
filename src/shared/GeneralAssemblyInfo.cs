@@ -29,7 +29,7 @@ using System.Resources;
 
 [assembly: AssemblyCompany("RzR ®")]
 [assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("Copyright © 2022-2025 RzR All rights reserved.")]
+[assembly: AssemblyCopyright("Copyright © 2022-2026 RzR All rights reserved.")]
 [assembly: AssemblyTrademark("® RzR™")]
 [assembly: AssemblyDescription("One important thing about this repository, you have the possibility to avoid database exceptions related to exceeding the limit of the maximum allowed length of the string type columns. To specify the maximum allowed string length you can use data annotation attributes predefined in `System.ComponentModel.DataAnnotations` or a new custom attribute.")]
 
