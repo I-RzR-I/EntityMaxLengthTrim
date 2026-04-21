@@ -1,3 +1,10 @@
+### **v2.0.0.5778** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 21-04-2026
+* [2b50993] (RzR) -> Adapt with small validation in `ApplyStringMaxAllowedLength`.
+* [eb37829] (RzR) -> Add property cacher.
+* [6614844] (RzR) -> Adapt `EntityPropChangeEventBase.SetContent`
+* [94d1ad9] (RzR) -> Adapt code for TrimPolicy.Throw
+* [4e0ddd7] (RzR) -> Change the namespace to `RzR.Extensions.EntityLength`.
+
 ### **v1.3.2.5621** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 04-12-2025
 * [fef303e] (RzR) -> Upgrade deprecated package version.
 
