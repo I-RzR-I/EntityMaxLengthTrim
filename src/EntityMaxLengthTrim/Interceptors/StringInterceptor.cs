@@ -295,7 +295,8 @@ namespace RzR.Extensions.EntityLength.Interceptors
             var stringProperties = EntityStringPropertyCache.GetStringProperties(entityType);
             foreach (var stringProperty in stringProperties)
             {
-                if (processOnlyAssigned && !propertiesOptions.ContainsKey(stringProperty.Name))
+                var hasOption = propertiesOptions.TryGetValue(stringProperty.Name, out var propOption);
+                if (processOnlyAssigned && !hasOption)
                     continue;
 
                 var currentValue = stringProperty.GetValue(entity);
@@ -306,7 +307,6 @@ namespace RzR.Extensions.EntityLength.Interceptors
                 if (maxLength.IsNull()) continue;
                 if (!(currentValue.Length > maxLength)) continue;
 
-                propertiesOptions.TryGetValue(stringProperty.Name, out var propOption);
                 var useWithDotTruncate = propOption?.UseDots ?? false;
                 var truncateType = propOption?.TruncateType ?? StringTruncateType.AtTheEndOf;
 
