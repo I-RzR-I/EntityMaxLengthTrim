@@ -23,6 +23,8 @@
 		<Language>en-US</Language>
 		<RepositoryType>GIT</RepositoryType>
 		<PackageIconUrl />
+		
+		<RootNamespace>RzR.Extensions.EntityLength</RootNamespace>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -50,7 +52,7 @@
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net45'">
 		<PackageReference Include="CodeSource">
-			<Version>4.0.2.4672</Version>
+			<Version>5.0.0.7373</Version>
 		</PackageReference>
 		<PackageReference Include="System.ComponentModel.Annotations">
 			<Version>5.0</Version>
@@ -59,7 +61,7 @@
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard1.5'">
 		<PackageReference Include="CodeSource">
-			<Version>4.0.2.4672</Version>
+			<Version>5.0.0.7373</Version>
 		</PackageReference>
 		<PackageReference Include="System.ComponentModel.Annotations">
 			<Version>5.0</Version>
@@ -74,7 +76,7 @@
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
 		<PackageReference Include="CodeSource">
-			<Version>4.0.2.4672</Version>
+			<Version>5.0.0.7373</Version>
 		</PackageReference>
 		<PackageReference Include="System.ComponentModel.Annotations">
 			<Version>5.0</Version>
@@ -83,7 +85,7 @@
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.1'">
 		<PackageReference Include="CodeSource">
-			<Version>4.0.2.4672</Version>
+			<Version>5.0.0.7373</Version>
 		</PackageReference>
 		<PackageReference Include="System.ComponentModel.Annotations">
 			<Version>5.0</Version>

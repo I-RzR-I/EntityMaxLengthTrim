@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.EntityMaxLengthTrim
+//  Assembly         : RzR.Extensions.EntityLength
 //  Author           : RzR
 //  Created On       : 2023-10-06 22:31
 // 
@@ -17,13 +17,13 @@
 #region U S A G E S
 
 using System.Collections.Generic;
-using EntityMaxLengthTrim.Enums;
-using EntityMaxLengthTrim.Interceptors;
-using EntityMaxLengthTrim.Options;
+using RzR.Extensions.EntityLength.Enums;
+using RzR.Extensions.EntityLength.Interceptors;
+using RzR.Extensions.EntityLength.Options;
 
 #endregion
 
-namespace EntityMaxLengthTrim.Extensions
+namespace RzR.Extensions.EntityLength.Extensions
 {
     /// <summary>
     ///     Fluent extensions for safe store object

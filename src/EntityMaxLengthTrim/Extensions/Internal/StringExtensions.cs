@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.EntityMaxLengthTrim
+//  Assembly         : RzR.Extensions.EntityLength
 //  Author           : RzR
 //  Created On       : 2022-09-24 03:47
 // 
@@ -16,11 +16,11 @@
 
 #region U S A G E S
 
-using CodeSource;
+using RzR.Core.CodeSource;
 
 #endregion
 
-namespace EntityMaxLengthTrim.Extensions.Internal
+namespace RzR.Extensions.EntityLength.Extensions.Internal
 {
     /// <summary>
     ///     Local string extensions

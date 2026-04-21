@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.EntityMaxLengthTrim
+//  Assembly         : RzR.Extensions.EntityLength
 //  Author           : RzR
 //  Created On       : 2022-09-24 03:55
 // 
@@ -16,16 +16,18 @@
 
 #region U S A G E S
 
-using EntityMaxLengthTrim.Enums;
-using EntityMaxLengthTrim.Extensions.Internal;
-using EntityMaxLengthTrim.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using RzR.Extensions.EntityLength.Enums;
+using RzR.Extensions.EntityLength.Exceptions;
+using RzR.Extensions.EntityLength.Extensions.Internal;
+using RzR.Extensions.EntityLength.Interceptors.Internal;
+using RzR.Extensions.EntityLength.Options;
 
 #endregion
 
-namespace EntityMaxLengthTrim.Interceptors
+namespace RzR.Extensions.EntityLength.Interceptors
 {
     /// <summary>
     ///     String interceptor
@@ -55,31 +57,24 @@ namespace EntityMaxLengthTrim.Interceptors
             where TEntity : class
         {
             if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
-            try
+
+            var entityType = typeof(TEntity);
+            var stringProperties = EntityStringPropertyCache.GetStringProperties(entityType);
+            foreach (var stringProperty in stringProperties)
             {
-                var entityType = typeof(TEntity);
-                var stringProperties = entityType.GetStringPropertyInfos();
-                foreach (var prop in stringProperties)
-                {
-                    var currentValue = (string)prop.GetValue(entity, null);
-                    if (!currentValue.IsPresent()) continue;
+                var currentValue = stringProperty.GetValue(entity);
+                if (!currentValue.IsPresent()) continue;
 
-                    var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
+                var maxLength = stringProperty.MaxLength;
 
-                    if (maxLength.IsNull()) continue;
-                    if (!(currentValue.Length > maxLength)) continue;
+                if (maxLength.IsNull()) continue;
+                if (!(currentValue.Length > maxLength)) continue;
 
-                    var newValue = truncateType == StringTruncateType.AtTheEndOf
-                        ? currentValue.Truncate(maxLength.Value, useDotOnEnd)
-                        : currentValue.TruncateAtStart(maxLength.Value, useDotOnEnd);
+                var newValue = truncateType == StringTruncateType.AtTheEndOf
+                    ? currentValue.Truncate(maxLength.Value, useDotOnEnd)
+                    : currentValue.TruncateAtStart(maxLength.Value, useDotOnEnd);
 
-                    prop.SetValue(entity, newValue, null);
-                }
-            }
-            catch
-            {
-                // ignored
-                // In case of any error, return unmodified entity
+                stringProperty.SetValue(entity, newValue);
             }
 
             return entity;
@@ -92,8 +87,10 @@ namespace EntityMaxLengthTrim.Interceptors
         /// <exception cref="ArgumentNullException">
         ///     Thrown when one or more required arguments are null.
         /// </exception>
-        /// <exception cref="InvalidOperationException">
-        ///     Thrown when the requested operation is invalid.
+        /// <exception cref="EntityMaxLengthExceededException">
+        ///     Thrown when <see cref="TrimOption.Policy" /> is <see cref="TrimPolicy.Throw" /> and a string
+        ///     property exceeds its configured maximum length. The exception carries the
+        ///     <see cref="TrimContext" /> describing the offending property.
         /// </exception>
         /// <typeparam name="TEntity">Type of the entity.</typeparam>
         /// <param name="entity">Input entity.</param>
@@ -111,52 +108,49 @@ namespace EntityMaxLengthTrim.Interceptors
                 throw new ArgumentNullException(nameof(entity));
             if (trimOption.IsNull())
                 trimOption = new TrimOption();
-            try
+
+            var entityType = typeof(TEntity);
+            var stringProperties = EntityStringPropertyCache.GetStringProperties(entityType);
+            foreach (var stringProperty in stringProperties)
             {
-                var entityType = typeof(TEntity);
-                var stringProperties = entityType.GetStringPropertyInfos();
-                foreach (var prop in stringProperties)
+                var currentValue = stringProperty.GetValue(entity);
+                if (!currentValue.IsPresent()) continue;
+
+                var maxLength = stringProperty.MaxLength;
+
+                if (maxLength.IsNull()) continue;
+                if (!(currentValue.Length > maxLength)) continue;
+
+                // For TrimPolicy.Throw, fail fast before doing any truncation work and surface a
+                // typed exception that carries the full TrimContext.
+                if (trimOption.Policy == TrimPolicy.Throw)
                 {
-                    var currentValue = (string)prop.GetValue(entity, null);
-                    if (!currentValue.IsPresent()) continue;
-
-                    var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
-
-                    if (maxLength.IsNull()) continue;
-                    if (!(currentValue.Length > maxLength)) continue;
-                    
-                    var newValue = trimOption.TruncateType == StringTruncateType.AtTheEndOf
-                        ? currentValue.Truncate(maxLength.Value, trimOption.UseDots)
-                        : currentValue.TruncateAtStart(maxLength.Value, trimOption.UseDots);
-
-                    var ctx = new TrimContext(entityType.Name, prop.Name, currentValue, newValue, maxLength);
-
-                    switch (trimOption.Policy)
-                    {
-                        case TrimPolicy.Silent:
-                            prop.SetValue(entity, newValue, null);
-                            break;
-                        case TrimPolicy.Warn:
-                            trimOption.Logger?.Invoke(ctx);
-                            prop.SetValue(entity, newValue, null);
-                            break;
-                        case TrimPolicy.Throw:
-                            throw new InvalidOperationException($"Property '{ctx.PropertyName}' on entity '{ctx.Entity}' " +
-                                                                $"exceeded max length {maxLength} (original {currentValue.Length}).");
-                            break;
-                        case TrimPolicy.ReportOnly:
-                            trimOption.Logger?.Invoke(ctx);
-                            break;
-                        default:
-                            prop.SetValue(entity, newValue, null);
-                            break;
-                    }
+                    var throwCtx = new TrimContext(entityType.Name, stringProperty.Name, currentValue, currentValue, maxLength);
+                    throw new EntityMaxLengthExceededException(throwCtx);
                 }
-            }
-            catch
-            {
-                // ignored
-                // In case of any error, return unmodified entity
+
+                var newValue = trimOption.TruncateType == StringTruncateType.AtTheEndOf
+                    ? currentValue.Truncate(maxLength.Value, trimOption.UseDots)
+                    : currentValue.TruncateAtStart(maxLength.Value, trimOption.UseDots);
+
+                var ctx = new TrimContext(entityType.Name, stringProperty.Name, currentValue, newValue, maxLength);
+
+                switch (trimOption.Policy)
+                {
+                    case TrimPolicy.Silent:
+                        stringProperty.SetValue(entity, newValue);
+                        break;
+                    case TrimPolicy.Warn:
+                        trimOption.Logger?.Invoke(ctx);
+                        stringProperty.SetValue(entity, newValue);
+                        break;
+                    case TrimPolicy.ReportOnly:
+                        trimOption.Logger?.Invoke(ctx);
+                        break;
+                    default:
+                        stringProperty.SetValue(entity, newValue);
+                        break;
+                }
             }
 
             return entity;
@@ -185,36 +179,33 @@ namespace EntityMaxLengthTrim.Interceptors
             StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
         {
-            if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
-            if (truncateWithDots.IsNull()) throw new ArgumentNullException(nameof(truncateWithDots));
-            try
+            if (entity.IsNull()) 
+                throw new ArgumentNullException(nameof(entity));
+            if (truncateWithDots.IsNull()) 
+                throw new ArgumentNullException(nameof(truncateWithDots));
+
+            var entityType = typeof(TEntity);
+            var propertiesWithDots = new HashSet<string>(truncateWithDots, StringComparer.Ordinal);
+            var stringProperties = EntityStringPropertyCache.GetStringProperties(entityType);
+            foreach (var stringProperty in stringProperties)
             {
-                var entityType = typeof(TEntity);
-                var stringProperties = processOnlyAssigned.Equals(true)
-                    ? entityType.GetStringPropertyInfos().Where(y => truncateWithDots.Contains(y.Name))
-                    : entityType.GetStringPropertyInfos();
-                foreach (var prop in stringProperties)
-                {
-                    var currentValue = (string)prop.GetValue(entity, null);
-                    if (!currentValue.IsPresent()) continue;
+                if (processOnlyAssigned && !propertiesWithDots.Contains(stringProperty.Name))
+                    continue;
 
-                    var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
+                var currentValue = stringProperty.GetValue(entity);
+                if (!currentValue.IsPresent()) continue;
 
-                    if (maxLength.IsNull()) continue;
-                    if (!(currentValue.Length > maxLength)) continue;
+                var maxLength = stringProperty.MaxLength;
 
-                    var useWithDotTruncate = truncateWithDots?.Any(x => x == prop.Name) ?? false;
-                    var newValue = truncateType == StringTruncateType.AtTheEndOf
-                        ? currentValue.Truncate(maxLength.Value, useWithDotTruncate)
-                        : currentValue.TruncateAtStart(maxLength.Value, useWithDotTruncate);
+                if (maxLength.IsNull()) continue;
+                if (!(currentValue.Length > maxLength)) continue;
 
-                    prop.SetValue(entity, newValue, null);
-                }
-            }
-            catch
-            {
-                // ignored
-                // In case of any error, return unmodified entity
+                var useWithDotTruncate = propertiesWithDots.Contains(stringProperty.Name);
+                var newValue = truncateType == StringTruncateType.AtTheEndOf
+                    ? currentValue.Truncate(maxLength.Value, useWithDotTruncate)
+                    : currentValue.TruncateAtStart(maxLength.Value, useWithDotTruncate);
+
+                stringProperty.SetValue(entity, newValue);
             }
 
             return entity;
@@ -243,33 +234,30 @@ namespace EntityMaxLengthTrim.Interceptors
             StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
         {
-            if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
-            if (string.IsNullOrEmpty(propertyName)) return entity;
-            try
+            if (entity.IsNull()) 
+                throw new ArgumentNullException(nameof(entity));
+            if (!propertyName.IsPresent()) 
+                return entity;
+
+            var entityType = typeof(TEntity);
+            var stringProperty = EntityStringPropertyCache.GetStringProperty(entityType, propertyName);
+            if (stringProperty.IsNotNull())
             {
-                var entityType = typeof(TEntity);
-                var prop = entityType.GetStringPropertyInfos().FirstOrDefault(x => x.Name.Equals(propertyName));
-                if (prop.IsNotNull())
-                {
-                    var currentValue = (string)prop!.GetValue(entity, null);
-                    if (!currentValue.IsPresent()) return entity;
+                var currentValue = stringProperty.GetValue(entity);
+                if (!currentValue.IsPresent()) return entity;
 
-                    var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
-                    if (maxLength.IsNull()) return entity;
+                var maxLength = stringProperty.MaxLength;
+                if (maxLength.IsNull())
+                    return entity;
 
-                    if (!(currentValue.Length > maxLength)) return entity;
+                if (!(currentValue.Length > maxLength))
+                    return entity;
 
-                    var newValue = truncateType == StringTruncateType.AtTheEndOf
-                        ? currentValue.Truncate(maxLength.Value, useDots)
-                        : currentValue.TruncateAtStart(maxLength.Value, useDots);
+                var newValue = truncateType == StringTruncateType.AtTheEndOf
+                    ? currentValue.Truncate(maxLength.Value, useDots)
+                    : currentValue.TruncateAtStart(maxLength.Value, useDots);
 
-                    prop.SetValue(entity, newValue, null);
-                }
-            }
-            catch
-            {
-                // ignored
-                // In case of any error, return unmodified entity
+                stringProperty.SetValue(entity, newValue);
             }
 
             return entity;
@@ -293,38 +281,40 @@ namespace EntityMaxLengthTrim.Interceptors
             bool processOnlyAssigned = false)
             where TEntity : class
         {
-            if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
-            if (options.IsNull()) throw new ArgumentNullException(nameof(options));
-            try
+            if (entity.IsNull()) 
+                throw new ArgumentNullException(nameof(entity));
+            if (options.IsNull()) 
+                throw new ArgumentNullException(nameof(options));
+
+            var entityType = typeof(TEntity);
+            var propertiesOptions = options
+                .Where(x => x.IsNotNull() && x.Name.IsPresent())
+                .GroupBy(x => x.Name)
+                .ToDictionary(x => x.Key, x => x.First(), StringComparer.Ordinal);
+
+            var stringProperties = EntityStringPropertyCache.GetStringProperties(entityType);
+            foreach (var stringProperty in stringProperties)
             {
-                var entityType = typeof(TEntity);
-                var stringProperties = processOnlyAssigned.Equals(true)
-                    ? entityType.GetStringPropertyInfos().Where(y => options.Select(x => x.Name).Contains(y.Name))
-                    : entityType.GetStringPropertyInfos();
-                foreach (var prop in stringProperties)
-                {
-                    var currentValue = (string)prop.GetValue(entity, null);
-                    if (!currentValue.IsPresent()) continue;
+                var hasOption = propertiesOptions.TryGetValue(stringProperty.Name, out var propOption);
+                if (processOnlyAssigned && !hasOption)
+                    continue;
 
-                    var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
+                var currentValue = stringProperty.GetValue(entity);
+                if (!currentValue.IsPresent()) continue;
 
-                    if (maxLength.IsNull()) continue;
-                    if (!(currentValue.Length > maxLength)) continue;
+                var maxLength = stringProperty.MaxLength;
 
-                    var useWithDotTruncate = options?.FirstOrDefault(x => x.Name == prop.Name)?.UseDots ?? false;
-                    var truncateType = options?.FirstOrDefault(x => x.Name == prop.Name)?.TruncateType ?? StringTruncateType.AtTheEndOf;
+                if (maxLength.IsNull()) continue;
+                if (!(currentValue.Length > maxLength)) continue;
 
-                    var newValue = truncateType == StringTruncateType.AtTheEndOf
-                        ? currentValue.Truncate(maxLength.Value, useWithDotTruncate)
-                        : currentValue.TruncateAtStart(maxLength.Value, useWithDotTruncate);
+                var useWithDotTruncate = propOption?.UseDots ?? false;
+                var truncateType = propOption?.TruncateType ?? StringTruncateType.AtTheEndOf;
 
-                    prop.SetValue(entity, newValue, null);
-                }
-            }
-            catch
-            {
-                // ignored
-                // In case of any error, return unmodified entity
+                var newValue = truncateType == StringTruncateType.AtTheEndOf
+                    ? currentValue.Truncate(maxLength.Value, useWithDotTruncate)
+                    : currentValue.TruncateAtStart(maxLength.Value, useWithDotTruncate);
+
+                stringProperty.SetValue(entity, newValue);
             }
 
             return entity;
@@ -355,30 +345,23 @@ namespace EntityMaxLengthTrim.Interceptors
         {
             if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
             if (!propertyName.IsPresent()) return null;
-            try
+
+            var entityType = typeof(TEntity);
+            var stringProperty = EntityStringPropertyCache.GetStringProperty(entityType, propertyName);
+            if (stringProperty.IsNotNull())
             {
-                var entityType = typeof(TEntity);
-                var prop = entityType.GetStringPropertyInfos().FirstOrDefault(x => x.Name.Equals(propertyName));
-                if (prop.IsNotNull())
-                {
-                    var currentValue = (string)prop!.GetValue(entity, null);
-                    if (!currentValue.IsPresent()) return currentValue;
+                var currentValue = stringProperty.GetValue(entity);
+                if (!currentValue.IsPresent()) return currentValue;
 
-                    var maxLength = prop.Name.GetMaxAllowedLength<TEntity>();
-                    if (maxLength.IsNull()) return currentValue;
-                    if (!(currentValue.Length > maxLength)) return currentValue;
+                var maxLength = stringProperty.MaxLength;
+                if (maxLength.IsNull()) return currentValue;
+                if (!(currentValue.Length > maxLength)) return currentValue;
 
-                    var newValue = truncateType == StringTruncateType.AtTheEndOf
-                        ? currentValue.Truncate(maxLength.Value, useDots)
-                        : currentValue.TruncateAtStart(maxLength.Value, useDots);
+                var newValue = truncateType == StringTruncateType.AtTheEndOf
+                    ? currentValue.Truncate(maxLength.Value, useDots)
+                    : currentValue.TruncateAtStart(maxLength.Value, useDots);
 
-                    return newValue;
-                }
-            }
-            catch
-            {
-                // ignored
-                // In case of any error, return unmodified property
+                return newValue;
             }
 
             return null;

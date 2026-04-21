@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.EntityMaxLengthTrim
+//  Assembly         : RzR.Extensions.EntityLength
 //  Author           : RzR
 //  Created On       : 2023-12-15 14:32
 // 
@@ -16,14 +16,15 @@
 
 #region U S A G E S
 
+using System;
 using System.ComponentModel;
-using EntityMaxLengthTrim.Enums;
-using EntityMaxLengthTrim.Extensions.Internal;
-using EntityMaxLengthTrim.Interceptors;
+using RzR.Extensions.EntityLength.Enums;
+using RzR.Extensions.EntityLength.Extensions.Internal;
+using RzR.Extensions.EntityLength.Interceptors;
 
 #endregion
 
-namespace EntityMaxLengthTrim
+namespace RzR.Extensions.EntityLength
 {
     /// -------------------------------------------------------------------------------------------------
     /// <summary>An entity property change event base.</summary>
@@ -69,6 +70,10 @@ namespace EntityMaxLengthTrim
         /// </param>
         /// <typeparam name="TEntity">Calling entity type</typeparam>
         /// <returns></returns>
+        /// <remarks>
+        ///     This overload uses <see cref="StringInterceptor" /> and resolves maximum length from
+        ///     property attributes.
+        /// </remarks>
         protected virtual void SetContent<TEntity>(TEntity callingEntity, string propertyName, ref string getValue,
             ref string setValue, StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
@@ -88,18 +93,33 @@ namespace EntityMaxLengthTrim
         /// <param name="propertyName">Changed property name</param>
         /// <param name="getValue">Get property value</param>
         /// <param name="setValue">Set property value</param>
-        /// <param name="length">Property maximum allowed length.</param>
+        /// <param name="length">Explicit property maximum allowed length.</param>
         /// <param name="truncateType">
         ///     (Optional) Type of the truncate.
         ///     Truncate string from the beginning or at the end.
         /// </param>
         /// <typeparam name="TEntity">Calling entity type</typeparam>
         /// <returns></returns>
+        /// <remarks>
+        ///     This overload applies the provided <paramref name="length" /> directly and does not use
+        ///     property attributes or <see cref="StringInterceptor" /> lookup.
+        /// </remarks>
         protected virtual void SetContent<TEntity>(TEntity callingEntity, string propertyName, ref string getValue,
             ref string setValue, int length, StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
         {
-            if (getValue == setValue) return;
+            if (callingEntity.IsNull()) 
+                throw new ArgumentNullException(nameof(callingEntity));
+            if (getValue == setValue) 
+                return;
+
+            if (setValue.IsNull())
+            {
+                getValue = null;
+                PropertyChanged?.Invoke(callingEntity, new PropertyChangedEventArgs(propertyName));
+                
+                return;
+            }
 
             getValue = truncateType == StringTruncateType.AtTheEndOf 
                 ? setValue.Truncate(length) 

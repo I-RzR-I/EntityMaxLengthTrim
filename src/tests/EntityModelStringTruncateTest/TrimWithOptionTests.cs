@@ -18,12 +18,13 @@
 
 using EntityModelStringTruncateTest.Models;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
-using EntityMaxLengthTrim.Enums;
-using EntityMaxLengthTrim.Extensions;
-using EntityMaxLengthTrim.Interceptors;
-using EntityMaxLengthTrim.Options;
 using EntityModelStringTruncateTest.Helpers;
+using RzR.Extensions.EntityLength.Enums;
+using RzR.Extensions.EntityLength.Exceptions;
+using RzR.Extensions.EntityLength.Interceptors;
+using RzR.Extensions.EntityLength.Options;
 
 #endregion
 
@@ -187,6 +188,46 @@ namespace EntityModelStringTruncateTest
             Assert.AreEqual(6, result.Text?.Length);
             Assert.True(result.Text?.Length <= 100);
             Assert.True(t.Text.Length <= 100);
+        }
+
+        [Test]
+        public void Throw_Policy_Throws_Typed_Exception_With_Context()
+        {
+            var ex = Assert.Throws<EntityMaxLengthExceededException>(() =>
+                StringInterceptor.ApplyStringMaxAllowedLength(_test1Model, new TrimOption
+                {
+                    Policy = TrimPolicy.Throw
+                }));
+
+            Assert.IsNotNull(ex.Context);
+            Assert.AreEqual(nameof(FooModel), ex.Context.Entity);
+            Assert.AreEqual(nameof(FooModel.Name), ex.Context.PropertyName);
+            Assert.AreEqual(PropertyMaxLengthHelper.NameMaxLength, ex.Context.MaxLength);
+            Assert.AreEqual(Constants.TextWithLength35, ex.Context.OriginalValue);
+
+            // Entity must remain unchanged when the throw policy fires (fail-fast, no truncation).
+            Assert.AreEqual(Constants.TextWithLength35, _test1Model.Name);
+        }
+
+        [Test]
+        public void Throw_Policy_Does_Not_Throw_When_All_Properties_Within_Limit()
+        {
+            var model = new FooModel { Name = "ok", FullName = "ok", Description = "ok" };
+
+            Assert.DoesNotThrow(() =>
+                StringInterceptor.ApplyStringMaxAllowedLength(model, new TrimOption
+                {
+                    Policy = TrimPolicy.Throw
+                }));
+
+            Assert.AreEqual("ok", model.Name);
+        }
+
+        [Test]
+        public void Null_Entity_Throws_ArgumentNullException_Even_With_Reflection_Errors_No_Longer_Swallowed()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+                StringInterceptor.ApplyStringMaxAllowedLength<FooModel>(null, new TrimOption()));
         }
     }
 

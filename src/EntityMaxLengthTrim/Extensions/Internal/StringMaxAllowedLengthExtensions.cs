@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.EntityMaxLengthTrim
+//  Assembly         : RzR.Extensions.EntityLength
 //  Author           : RzR
 //  Created On       : 2022-09-23 08:38
 // 
@@ -18,20 +18,17 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
 using System.Linq;
-using EntityMaxLengthTrim.Attributes;
-
+using System.Reflection;
+using RzR.Extensions.EntityLength.Attributes;
 
 #if DEBUG
-#endif
-#if NETSTANDARD1_5
-using System.Reflection;
+using System.Diagnostics;
 #endif
 
 #endregion
 
-namespace EntityMaxLengthTrim.Extensions.Internal
+namespace RzR.Extensions.EntityLength.Extensions.Internal
 {
     /// <summary>
     ///     Maximum allowed length for string type extensions
@@ -50,17 +47,9 @@ namespace EntityMaxLengthTrim.Extensions.Internal
         {
             try
             {
-                var length = propertyName.GetFromMaxLengthAttribute<TEntity>();
-                if (length.IsNotNull())
-                    return length;
+                var propertyInfo = typeof(TEntity).GetProperty(propertyName);
 
-                length = propertyName.GetFromStringLengthAttribute<TEntity>();
-                if (length.IsNotNull())
-                    return length;
-
-                length = propertyName.GetFromMaxAllowedLengthAttribute<TEntity>();
-                if (length.IsNotNull())
-                    return length;
+                return propertyInfo.GetMaxAllowedLength();
             }
 #if DEBUG
             catch (Exception e)
@@ -72,68 +61,41 @@ namespace EntityMaxLengthTrim.Extensions.Internal
 #endif
                 return null;
             }
+        }
+
+        /// <summary>
+        ///     Get the maximum allowed length for a string property.
+        /// </summary>
+        /// <param name="propertyInfo">Property information.</param>
+        /// <returns>Resolved max length from configured attributes.</returns>
+        internal static int? GetMaxAllowedLength(this PropertyInfo propertyInfo)
+        {
+            try
+            {
+                if (propertyInfo.IsNull())
+                    return null;
+
+                var maxLength = propertyInfo.GetCustomAttributes(typeof(MaxLengthAttribute), false)
+                    .Cast<MaxLengthAttribute>()
+                    .FirstOrDefault();
+                if (maxLength.IsNotNull())
+                    return maxLength!.Length;
+
+                var stringLength = propertyInfo.GetCustomAttributes(typeof(StringLengthAttribute), false)
+                    .Cast<StringLengthAttribute>()
+                    .FirstOrDefault();
+                if (stringLength.IsNotNull())
+                    return stringLength!.MaximumLength;
+
+                var customLength = propertyInfo.GetCustomAttributes(typeof(MaxAllowedLengthAttribute), false)
+                    .Cast<MaxAllowedLengthAttribute>()
+                    .FirstOrDefault();
+                if (customLength.IsNotNull())
+                    return customLength!.MaxLength;
+            }
+            catch { return null; }
 
             return null;
-        }
-
-        /// <summary>
-        ///     Get max length from 'MaxLength' attribute
-        /// </summary>
-        /// <param name="propertyName">Property name</param>
-        /// <returns>Return property length decorated with MaxLengthAttribute</returns>
-        /// <remarks>Return 'null' or '0' length in case of exception or not set property length value</remarks>
-        private static int? GetFromMaxLengthAttribute<TEntity>(this string propertyName)
-            where TEntity : class
-        {
-            try
-            {
-                var length = typeof(TEntity).GetProperty(propertyName)
-                    ?.GetCustomAttributes(typeof(MaxLengthAttribute), false).Cast<MaxLengthAttribute>()
-                    .FirstOrDefault();
-
-                return length?.Length;
-            }
-            catch { return null; }
-        }
-
-        /// <summary>
-        ///     Get max length from 'StringLength' attribute
-        /// </summary>
-        /// <param name="propertyName">Property name</param>
-        /// <returns>Return property length decorated with StringLengthAttribute</returns>
-        /// <remarks>Return 'null' or '0' length in case of exception or not set property length value</remarks>
-        private static int? GetFromStringLengthAttribute<TEntity>(this string propertyName)
-            where TEntity : class
-        {
-            try
-            {
-                var length = typeof(TEntity).GetProperty(propertyName)
-                    ?.GetCustomAttributes(typeof(StringLengthAttribute), false).Cast<StringLengthAttribute>()
-                    .FirstOrDefault();
-
-                return length?.MaximumLength;
-            }
-            catch { return null; }
-        }
-
-        /// <summary>
-        ///     Get max length from 'MaxAllowedLength' attribute
-        /// </summary>
-        /// <param name="propertyName">Property name</param>
-        /// <returns>Return property length decorated with MaxAllowedLengthAttribute</returns>
-        /// <remarks>Return 'null' or '0' length in case of exception or not set property length value</remarks>
-        private static int? GetFromMaxAllowedLengthAttribute<TEntity>(this string propertyName)
-        where TEntity : class
-        {
-            try
-            {
-                var length = typeof(TEntity).GetProperty(propertyName)
-                    ?.GetCustomAttributes(typeof(MaxAllowedLengthAttribute), false).Cast<MaxAllowedLengthAttribute>()
-                    .FirstOrDefault();
-
-                return length?.MaxLength;
-            }
-            catch { return null; }
         }
     }
 }

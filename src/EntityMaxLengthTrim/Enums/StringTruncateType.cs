@@ -1,5 +1,5 @@
 ﻿// ***********************************************************************
-//  Assembly         : RzR.Shared.Entity.EntityMaxLengthTrim
+//  Assembly         : RzR.Extensions.EntityLength
 //  Author           : RzR
 //  Created On       : 2025-08-25 16:03
 // 
@@ -14,7 +14,7 @@
 //  </summary>
 // ***********************************************************************
 
-namespace EntityMaxLengthTrim.Enums
+namespace RzR.Extensions.EntityLength.Enums
 {
     /// -------------------------------------------------------------------------------------------------
     /// <summary>

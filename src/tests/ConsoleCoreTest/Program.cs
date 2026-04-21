@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using ConsoleCoreTest.Models;
-using EntityMaxLengthTrim.Interceptors;
-using EntityMaxLengthTrim.Options;
+using RzR.Extensions.EntityLength.Interceptors;
+using RzR.Extensions.EntityLength.Options;
+
 // ReSharper disable UnusedParameter.Local
 // ReSharper disable UnusedVariable
 // ReSharper disable ClassNeverInstantiated.Global
