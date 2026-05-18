@@ -56,6 +56,32 @@ namespace RzR.Extensions.EntityLength.Extensions
         ///     Prepare initialized object to save store string properties.
         /// </summary>
         /// <param name="initSourceObject">Required. Initialized object with data.</param>
+        /// <param name="useDotOnEnd">
+        ///     If set to <see langword="true" />, then at the end of
+        ///     string property will be '...'; otherwise, truncate to max length.
+        /// </param>
+        /// <param name="truncateType">
+        ///     Type of the truncate.
+        ///     Truncate string from the beginning or at the end.
+        /// </param>
+        /// <param name="forceTrimEnd">
+        ///     If set to <see langword="true" />, trailing spaces may be trimmed
+        ///     according to truncation strategy.
+        /// </param>
+        /// <returns></returns>
+        /// <typeparam name="TEntity">Type of initialized object.</typeparam>
+        public static TEntity ToSafeStoreStrings<TEntity>(
+            this TEntity initSourceObject,
+            bool useDotOnEnd,
+            StringTruncateType truncateType,
+            bool forceTrimEnd)
+            where TEntity : class
+            => StringInterceptor.ApplyStringMaxAllowedLength(initSourceObject, useDotOnEnd, truncateType, forceTrimEnd);
+
+        /// <summary>
+        ///     Prepare initialized object to save store string properties.
+        /// </summary>
+        /// <param name="initSourceObject">Required. Initialized object with data.</param>
         /// <param name="truncateWithDots">
         ///     Required. The default value is false. If set to <see langword="true" />, then ant the end of
         ///     string prop will be '...'; otherwise, truncate to max length.
@@ -83,6 +109,36 @@ namespace RzR.Extensions.EntityLength.Extensions
         ///     Prepare initialized object to save store string properties.
         /// </summary>
         /// <param name="initSourceObject">Required. Initialized object with data.</param>
+        /// <param name="truncateWithDots">
+        ///     Required. Properties list that should use dots suffix.
+        /// </param>
+        /// <param name="processOnlyAssigned">
+        ///     Optional. If set to <see langword="true" />, then
+        ///     process only specified props; otherwise, process all props.
+        /// </param>
+        /// <param name="truncateType">
+        ///     Type of the truncate.
+        ///     Truncate string from the beginning or at the end.
+        /// </param>
+        /// <param name="forceTrimEnd">
+        ///     If set to <see langword="true" />, trailing spaces may be trimmed
+        ///     according to truncation strategy.
+        /// </param>
+        /// <returns></returns>
+        /// <typeparam name="TEntity">Type of initialized object.</typeparam>
+        public static TEntity ToSafeStoreStrings<TEntity>(
+            this TEntity initSourceObject,
+            IReadOnlyCollection<string> truncateWithDots,
+            bool processOnlyAssigned,
+            StringTruncateType truncateType,
+            bool forceTrimEnd)
+            where TEntity : class
+            => StringInterceptor.ApplyStringMaxAllowedLength(initSourceObject, truncateWithDots, processOnlyAssigned, truncateType, forceTrimEnd);
+
+        /// <summary>
+        ///     Prepare initialized object to save store string properties.
+        /// </summary>
+        /// <param name="initSourceObject">Required. Initialized object with data.</param>
         /// <param name="options">Required. Properties options</param>
         /// <param name="processOnlyAssigned">
         ///     Optional. The default value is false.If set to <see langword="true" />, then
@@ -97,5 +153,28 @@ namespace RzR.Extensions.EntityLength.Extensions
             bool processOnlyAssigned = false)
             where TEntity : class
             => StringInterceptor.ApplyStringMaxAllowedLength(initSourceObject, options, processOnlyAssigned);
+
+        /// <summary>
+        ///     Prepare initialized object to save store string properties.
+        /// </summary>
+        /// <param name="initSourceObject">Required. Initialized object with data.</param>
+        /// <param name="options">Required. Properties options</param>
+        /// <param name="processOnlyAssigned">
+        ///     Optional. If set to <see langword="true" />, then
+        ///     process only specified props; otherwise, process all props.
+        /// </param>
+        /// <param name="forceTrimEnd">
+        ///     If set to <see langword="true" />, trailing spaces may be trimmed
+        ///     according to truncation strategy.
+        /// </param>
+        /// <returns></returns>
+        /// <typeparam name="TEntity">Type of initialized object.</typeparam>
+        public static TEntity ToSafeStoreStrings<TEntity>(
+            this TEntity initSourceObject,
+            IReadOnlyCollection<PropertyOption> options,
+            bool processOnlyAssigned,
+            bool forceTrimEnd)
+            where TEntity : class
+            => StringInterceptor.ApplyStringMaxAllowedLength(initSourceObject, options, processOnlyAssigned, forceTrimEnd);
     }
 }

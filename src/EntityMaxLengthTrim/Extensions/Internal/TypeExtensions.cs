@@ -20,7 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using RzR.Core.CodeSource;
 
 #endregion
 
@@ -36,8 +35,10 @@ namespace RzR.Extensions.EntityLength.Extensions.Internal
         ///     Get all properties
         /// </summary>
         /// <param name="type">Entity type</param>
+        /// <remarks>
+        ///     Source: https://github.com/I-RzR-I/DomainCommonExtensions
+        /// </remarks>
         /// <returns>Return list of properties(PropertyInfo) from specified 'System.Type'.</returns>
-        [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR", "1.0")]
         internal static IEnumerable<PropertyInfo> GetPropertyInfos(this Type type)
         {
             try
@@ -53,8 +54,10 @@ namespace RzR.Extensions.EntityLength.Extensions.Internal
         ///     Get all string properties
         /// </summary>
         /// <param name="type">Entity type</param>
+        /// <remarks>
+        ///     Source: https://github.com/I-RzR-I/DomainCommonExtensions
+        /// </remarks>
         /// <returns>Return list of properties(PropertyInfo, string properties) from specified 'System.Type'</returns>
-        [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR", "1.0")]
         internal static IEnumerable<PropertyInfo> GetStringPropertyInfos(this Type type)
         {
             try
@@ -71,8 +74,10 @@ namespace RzR.Extensions.EntityLength.Extensions.Internal
         ///     Get all string properties name
         /// </summary>
         /// <param name="type">Entity type</param>
+        /// <remarks>
+        ///     Source: https://github.com/I-RzR-I/DomainCommonExtensions
+        /// </remarks>
         /// <returns>Return list of properties (string properties) from specified 'System.Type'</returns>
-        [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR", "1.0")]
         internal static IEnumerable<string> GetStringPropertyNames(this Type type)
         {
             try

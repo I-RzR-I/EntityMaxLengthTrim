@@ -14,12 +14,6 @@
 //  </summary>
 // ***********************************************************************
 
-#region U S A G E S
-
-using RzR.Core.CodeSource;
-
-#endregion
-
 namespace RzR.Extensions.EntityLength.Extensions.Internal
 {
     /// <summary>
@@ -31,16 +25,20 @@ namespace RzR.Extensions.EntityLength.Extensions.Internal
         ///     Check if the source object is null
         /// </summary>
         /// <param name="source">Object to be checked</param>
+        /// <remarks>
+        ///     Source: https://github.com/I-RzR-I/DomainCommonExtensions
+        /// </remarks>
         /// <returns>Return bool value (validation result).</returns>
-        [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR", "1.0")]
         internal static bool IsNull(this object source) => source == null;
 
         /// <summary>
         ///     Check if the source object is not null
         /// </summary>
         /// <param name="source">Object to be checked</param>
+        /// <remarks>
+        ///     Source: https://github.com/I-RzR-I/DomainCommonExtensions
+        /// </remarks>
         /// <returns>Return bool value (validation result).</returns>
-        [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR", "1.0")]
         internal static bool IsNotNull(this object source) => !source.IsNull();
     }
 }

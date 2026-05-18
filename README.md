@@ -23,5 +23,5 @@ No additional components or packs are required for use. So, it only needs to be 
 
 ## Content
 1. [USING](docs/usage.md)
-1. [CHANGELOG](docs/CHANGELOG.md)
-1. [BRANCH-GUIDE](docs/branch-guide.md)
+2. [CHANGELOG](docs/CHANGELOG.md)
+3. [BRANCH-GUIDE](docs/branch-guide.md)

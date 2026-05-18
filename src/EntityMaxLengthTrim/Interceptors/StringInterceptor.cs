@@ -55,6 +55,31 @@ namespace RzR.Extensions.EntityLength.Interceptors
             bool useDotOnEnd = false,
             StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
+            => ApplyStringMaxAllowedLength(entity, useDotOnEnd, truncateType, true);
+
+        /// <summary>
+        ///     Apply maximum allowed string length filter
+        /// </summary>
+        /// <param name="entity">Input entity</param>
+        /// <param name="useDotOnEnd">
+        ///     If set to <see langword="true" />, then at the end of the string
+        ///     will be appended (...); otherwise, string will be truncated.
+        /// </param>
+        /// <param name="truncateType">
+        ///     Type of truncation direction.
+        /// </param>
+        /// <param name="forceTrimEnd">
+        ///     If set to <see langword="true" />, trailing spaces may be trimmed
+        ///     according to truncation strategy.
+        /// </param>
+        /// <returns>Processed/parsed entity with new values</returns>
+        /// <typeparam name="TEntity">Current entity type</typeparam>
+        public static TEntity ApplyStringMaxAllowedLength<TEntity>(
+            TEntity entity,
+            bool useDotOnEnd,
+            StringTruncateType truncateType,
+            bool forceTrimEnd)
+            where TEntity : class
         {
             if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
 
@@ -71,8 +96,8 @@ namespace RzR.Extensions.EntityLength.Interceptors
                 if (!(currentValue.Length > maxLength)) continue;
 
                 var newValue = truncateType == StringTruncateType.AtTheEndOf
-                    ? currentValue.Truncate(maxLength.Value, useDotOnEnd)
-                    : currentValue.TruncateAtStart(maxLength.Value, useDotOnEnd);
+                    ? currentValue.Truncate(maxLength.Value, useDotOnEnd, forceTrimEnd)
+                    : currentValue.TruncateAtStart(maxLength.Value, useDotOnEnd, forceTrimEnd);
 
                 stringProperty.SetValue(entity, newValue);
             }
@@ -130,8 +155,8 @@ namespace RzR.Extensions.EntityLength.Interceptors
                 }
 
                 var newValue = trimOption.TruncateType == StringTruncateType.AtTheEndOf
-                    ? currentValue.Truncate(maxLength.Value, trimOption.UseDots)
-                    : currentValue.TruncateAtStart(maxLength.Value, trimOption.UseDots);
+                    ? currentValue.Truncate(maxLength.Value, trimOption.UseDots, trimOption.ApplyForceTrimEnd)
+                    : currentValue.TruncateAtStart(maxLength.Value, trimOption.UseDots, trimOption.ApplyForceTrimEnd);
 
                 var ctx = new TrimContext(entityType.Name, stringProperty.Name, currentValue, newValue, maxLength);
 
@@ -178,10 +203,38 @@ namespace RzR.Extensions.EntityLength.Interceptors
             bool processOnlyAssigned = false,
             StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
+            => ApplyStringMaxAllowedLength(entity, truncateWithDots, processOnlyAssigned, truncateType, true);
+
+        /// <summary>
+        ///     Apply maximum allowed string length filter
+        /// </summary>
+        /// <param name="entity">Input entity</param>
+        /// <param name="truncateWithDots">
+        ///     List of properties where at the end of
+        ///     the all string list u will see (...).
+        /// </param>
+        /// <param name="processOnlyAssigned">Process only properties from param 'truncateWithDots'</param>
+        /// <param name="truncateType">
+        ///     Type of the truncate.
+        ///     Truncate string from the beginning or at the end.
+        /// </param>
+        /// <param name="forceTrimEnd">
+        ///     If set to <see langword="true" />, trailing spaces may be trimmed
+        ///     according to truncation strategy.
+        /// </param>
+        /// <returns>Processed/parsed entity with new values</returns>
+        /// <typeparam name="TEntity">Current entity type</typeparam>
+        public static TEntity ApplyStringMaxAllowedLength<TEntity>(
+            TEntity entity,
+            IReadOnlyCollection<string> truncateWithDots,
+            bool processOnlyAssigned,
+            StringTruncateType truncateType,
+            bool forceTrimEnd)
+            where TEntity : class
         {
-            if (entity.IsNull()) 
+            if (entity.IsNull())
                 throw new ArgumentNullException(nameof(entity));
-            if (truncateWithDots.IsNull()) 
+            if (truncateWithDots.IsNull())
                 throw new ArgumentNullException(nameof(truncateWithDots));
 
             var entityType = typeof(TEntity);
@@ -202,8 +255,8 @@ namespace RzR.Extensions.EntityLength.Interceptors
 
                 var useWithDotTruncate = propertiesWithDots.Contains(stringProperty.Name);
                 var newValue = truncateType == StringTruncateType.AtTheEndOf
-                    ? currentValue.Truncate(maxLength.Value, useWithDotTruncate)
-                    : currentValue.TruncateAtStart(maxLength.Value, useWithDotTruncate);
+                    ? currentValue.Truncate(maxLength.Value, useWithDotTruncate, forceTrimEnd)
+                    : currentValue.TruncateAtStart(maxLength.Value, useWithDotTruncate, forceTrimEnd);
 
                 stringProperty.SetValue(entity, newValue);
             }
@@ -233,10 +286,38 @@ namespace RzR.Extensions.EntityLength.Interceptors
             bool useDots = true,
             StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
+            => ApplyStringMaxAllowedLength(entity, propertyName, useDots, truncateType, true);
+
+        /// <summary>
+        ///     Apply maximum allowed string length filter
+        /// </summary>
+        /// <param name="entity">Input entity</param>
+        /// <param name="propertyName">Property name</param>
+        /// <param name="useDots">
+        ///     If set to <see langword="true" />, then property value at the end will have dots (...);
+        ///     otherwise, value will be truncated at the allowed limit.
+        /// </param>
+        /// <param name="truncateType">
+        ///     Type of the truncate.
+        ///     Truncate string from the beginning or at the end.
+        /// </param>
+        /// <param name="forceTrimEnd">
+        ///     If set to <see langword="true" />, trailing spaces may be trimmed
+        ///     according to truncation strategy.
+        /// </param>
+        /// <returns>Processed/parsed entity with new values</returns>
+        /// <typeparam name="TEntity">Current entity type</typeparam>
+        public static TEntity ApplyStringMaxAllowedLength<TEntity>(
+            TEntity entity,
+            string propertyName,
+            bool useDots,
+            StringTruncateType truncateType,
+            bool forceTrimEnd)
+            where TEntity : class
         {
-            if (entity.IsNull()) 
+            if (entity.IsNull())
                 throw new ArgumentNullException(nameof(entity));
-            if (!propertyName.IsPresent()) 
+            if (!propertyName.IsPresent())
                 return entity;
 
             var entityType = typeof(TEntity);
@@ -254,8 +335,8 @@ namespace RzR.Extensions.EntityLength.Interceptors
                     return entity;
 
                 var newValue = truncateType == StringTruncateType.AtTheEndOf
-                    ? currentValue.Truncate(maxLength.Value, useDots)
-                    : currentValue.TruncateAtStart(maxLength.Value, useDots);
+                    ? currentValue.Truncate(maxLength.Value, useDots, forceTrimEnd)
+                    : currentValue.TruncateAtStart(maxLength.Value, useDots, forceTrimEnd);
 
                 stringProperty.SetValue(entity, newValue);
             }
@@ -280,10 +361,33 @@ namespace RzR.Extensions.EntityLength.Interceptors
             IReadOnlyCollection<PropertyOption> options,
             bool processOnlyAssigned = false)
             where TEntity : class
+            => ApplyStringMaxAllowedLength(entity, options, processOnlyAssigned, true);
+
+        /// <summary>
+        ///     Apply maximum allowed string length filter
+        /// </summary>
+        /// <param name="entity">Required. Input entity</param>
+        /// <param name="options">Required. Option for processing fields</param>
+        /// <param name="processOnlyAssigned">
+        ///     Optional. The default value is false. If set to <see langword="true" />, then process
+        ///     only properties from param 'truncateWithDots'; otherwise, will be processed all fields.
+        /// </param>
+        /// <param name="forceTrimEnd">
+        ///     If set to <see langword="true" />, trailing spaces may be trimmed
+        ///     according to truncation strategy.
+        /// </param>
+        /// <returns>Processed/parsed entity with new values</returns>
+        /// <typeparam name="TEntity">Current entity type</typeparam>
+        public static TEntity ApplyStringMaxAllowedLength<TEntity>(
+            TEntity entity,
+            IReadOnlyCollection<PropertyOption> options,
+            bool processOnlyAssigned,
+            bool forceTrimEnd)
+            where TEntity : class
         {
-            if (entity.IsNull()) 
+            if (entity.IsNull())
                 throw new ArgumentNullException(nameof(entity));
-            if (options.IsNull()) 
+            if (options.IsNull())
                 throw new ArgumentNullException(nameof(options));
 
             var entityType = typeof(TEntity);
@@ -309,10 +413,11 @@ namespace RzR.Extensions.EntityLength.Interceptors
 
                 var useWithDotTruncate = propOption?.UseDots ?? false;
                 var truncateType = propOption?.TruncateType ?? StringTruncateType.AtTheEndOf;
+                var effectiveForceTrimEnd = propOption?.ApplyForceTrimEnd ?? forceTrimEnd;
 
                 var newValue = truncateType == StringTruncateType.AtTheEndOf
-                    ? currentValue.Truncate(maxLength.Value, useWithDotTruncate)
-                    : currentValue.TruncateAtStart(maxLength.Value, useWithDotTruncate);
+                    ? currentValue.Truncate(maxLength.Value, useWithDotTruncate, effectiveForceTrimEnd)
+                    : currentValue.TruncateAtStart(maxLength.Value, useWithDotTruncate, effectiveForceTrimEnd);
 
                 stringProperty.SetValue(entity, newValue);
             }
@@ -342,6 +447,34 @@ namespace RzR.Extensions.EntityLength.Interceptors
             bool useDots = true,
             StringTruncateType truncateType = StringTruncateType.AtTheEndOf)
             where TEntity : class
+            => ApplyPropStringMaxAllowedLength(entity, propertyName, useDots, truncateType, true);
+
+        /// <summary>
+        ///     Apply maximum allowed string length filter
+        /// </summary>
+        /// <param name="entity">Input entity</param>
+        /// <param name="propertyName">Property name</param>
+        /// <param name="useDots">
+        ///     If set to <see langword="true" />, then property value at the end will have dots (...);
+        ///     otherwise, value will be truncated at the allowed limit.
+        /// </param>
+        /// <param name="truncateType">
+        ///     Type of the truncate.
+        ///     Truncate string from the beginning or at the end.
+        /// </param>
+        /// <param name="forceTrimEnd">
+        ///     If set to <see langword="true" />, trailing spaces may be trimmed
+        ///     according to truncation strategy.
+        /// </param>
+        /// <returns>Processed/parsed property with new value</returns>
+        /// <typeparam name="TEntity">Current entity type</typeparam>
+        public static string ApplyPropStringMaxAllowedLength<TEntity>(
+            TEntity entity,
+            string propertyName,
+            bool useDots,
+            StringTruncateType truncateType,
+            bool forceTrimEnd)
+            where TEntity : class
         {
             if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
             if (!propertyName.IsPresent()) return null;
@@ -358,8 +491,8 @@ namespace RzR.Extensions.EntityLength.Interceptors
                 if (!(currentValue.Length > maxLength)) return currentValue;
 
                 var newValue = truncateType == StringTruncateType.AtTheEndOf
-                    ? currentValue.Truncate(maxLength.Value, useDots)
-                    : currentValue.TruncateAtStart(maxLength.Value, useDots);
+                    ? currentValue.Truncate(maxLength.Value, useDots, forceTrimEnd)
+                    : currentValue.TruncateAtStart(maxLength.Value, useDots, forceTrimEnd);
 
                 return newValue;
             }
