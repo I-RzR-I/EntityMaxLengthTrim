@@ -19,7 +19,6 @@
 using EntityModelStringTruncateTest.Models;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using EntityModelStringTruncateTest.Helpers;
 using RzR.Extensions.EntityLength.Enums;
 using RzR.Extensions.EntityLength.Exceptions;
@@ -223,11 +222,137 @@ namespace EntityModelStringTruncateTest
             Assert.AreEqual("ok", model.Name);
         }
 
+        [TestCase(1, ".")]
+        [TestCase(2, "..")]
+        [TestCase(3, "...")]
+        public void UseDots_AtTheEnd_WithVerySmallMaxLength_Still_Respects_MaxLength(int maxLength, string expected)
+        {
+            var result = ApplySmallLimit(maxLength, StringTruncateType.AtTheEndOf);
+
+            Assert.AreEqual(expected, result);
+            Assert.AreEqual(maxLength, result.Length);
+        }
+
+        [TestCase(1, ".")]
+        [TestCase(2, "..")]
+        [TestCase(3, "...")]
+        public void UseDots_AtTheStart_WithVerySmallMaxLength_Still_Respects_MaxLength(int maxLength, string expected)
+        {
+            var result = ApplySmallLimit(maxLength, StringTruncateType.AtTheStartOf);
+
+            Assert.AreEqual(expected, result);
+            Assert.AreEqual(maxLength, result.Length);
+        }
+
+        [Test]
+        public void Truncate_WithoutDots_Preserves_Trailing_Spaces_In_Retained_Slice()
+        {
+            var model = new MaxLengthFiveModel { Text = "abc  xyz" };
+
+            var result = StringInterceptor.ApplyStringMaxAllowedLength(model, new TrimOption
+            {
+                Policy = TrimPolicy.Silent,
+                UseDots = false,
+                ApplyForceTrimEnd = false
+            });
+
+            Assert.AreEqual("abc  ", result.Text);
+            Assert.AreEqual(5, result.Text.Length);
+        }
+
+        [Test]
+        public void Truncate_WithDots_Trims_Only_The_Space_Before_Suffix()
+        {
+            var model = new MaxLengthSixModel { Text = "ab  xyz" };
+
+            var result = StringInterceptor.ApplyStringMaxAllowedLength(model, new TrimOption
+            {
+                Policy = TrimPolicy.Silent,
+                UseDots = true,
+                ApplyForceTrimEnd = true
+            });
+
+            Assert.AreEqual("ab...", result.Text);
+            Assert.AreEqual(5, result.Text.Length);
+        }
+
+        [Test]
+        public void Truncate_WithDots_ApplyForceTrimEndFalse_Preserves_Space_Before_Suffix()
+        {
+            var model = new MaxLengthSixModel { Text = "ab  xyz" };
+
+            var result = StringInterceptor.ApplyStringMaxAllowedLength(model, new TrimOption
+            {
+                Policy = TrimPolicy.Silent,
+                UseDots = true,
+                ApplyForceTrimEnd = false
+            });
+
+            Assert.AreEqual("ab ...", result.Text);
+            Assert.AreEqual(6, result.Text.Length);
+        }
+
+        [Test]
+        public void TruncateAtStart_WithoutDots_ApplyForceTrimEndTrue_Preserves_Trailing_Spaces()
+        {
+            var model = new MaxLengthFiveModel { Text = "abcd  " };
+
+            var result = StringInterceptor.ApplyStringMaxAllowedLength(model, new TrimOption
+            {
+                Policy = TrimPolicy.Silent,
+                UseDots = false,
+                TruncateType = StringTruncateType.AtTheStartOf,
+                ApplyForceTrimEnd = true
+            });
+
+            Assert.AreEqual("bcd  ", result.Text);
+            Assert.AreEqual(5, result.Text.Length);
+        }
+
+        [Test]
+        public void TruncateAtStart_WithoutDots_ApplyForceTrimEndFalse_Preserves_Trailing_Spaces()
+        {
+            var model = new MaxLengthFiveModel { Text = "abcd  " };
+
+            var result = StringInterceptor.ApplyStringMaxAllowedLength(model, new TrimOption
+            {
+                Policy = TrimPolicy.Silent,
+                UseDots = false,
+                TruncateType = StringTruncateType.AtTheStartOf,
+                ApplyForceTrimEnd = false
+            });
+
+            Assert.AreEqual("bcd  ", result.Text);
+            Assert.AreEqual(5, result.Text.Length);
+        }
+
         [Test]
         public void Null_Entity_Throws_ArgumentNullException_Even_With_Reflection_Errors_No_Longer_Swallowed()
         {
             Assert.Throws<ArgumentNullException>(() =>
                 StringInterceptor.ApplyStringMaxAllowedLength<FooModel>(null, new TrimOption()));
+        }
+
+        private static string ApplySmallLimit(int maxLength, StringTruncateType truncateType)
+        {
+            var options = new TrimOption
+            {
+                Policy = TrimPolicy.Silent,
+                UseDots = true,
+                TruncateType = truncateType
+            };
+
+            switch (maxLength)
+            {
+                case 1:
+                    return StringInterceptor.ApplyStringMaxAllowedLength(new SmallLimit1Model { Text = "abcdef" }, options).Text;
+                case 2:
+                    return StringInterceptor.ApplyStringMaxAllowedLength(new SmallLimit2Model { Text = "abcdef" }, options).Text;
+                case 3:
+                    return StringInterceptor.ApplyStringMaxAllowedLength(new SmallLimit3Model { Text = "abcdef" }, options).Text;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(maxLength));
+            }
         }
     }
 
@@ -235,5 +360,35 @@ namespace EntityModelStringTruncateTest
     {
         [System.ComponentModel.DataAnnotations.MaxLength(100)]
         public string Text { get; set; } = "😀😀😀";
+    }
+
+    class SmallLimit1Model
+    {
+        [System.ComponentModel.DataAnnotations.MaxLength(1)]
+        public string Text { get; set; }
+    }
+
+    class SmallLimit2Model
+    {
+        [System.ComponentModel.DataAnnotations.MaxLength(2)]
+        public string Text { get; set; }
+    }
+
+    class SmallLimit3Model
+    {
+        [System.ComponentModel.DataAnnotations.MaxLength(3)]
+        public string Text { get; set; }
+    }
+
+    class MaxLengthFiveModel
+    {
+        [System.ComponentModel.DataAnnotations.MaxLength(5)]
+        public string Text { get; set; }
+    }
+
+    class MaxLengthSixModel
+    {
+        [System.ComponentModel.DataAnnotations.MaxLength(6)]
+        public string Text { get; set; }
     }
 }
