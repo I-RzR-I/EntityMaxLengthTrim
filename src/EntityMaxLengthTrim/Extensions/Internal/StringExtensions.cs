@@ -14,12 +14,6 @@
 //  </summary>
 // ***********************************************************************
 
-#region U S A G E S
-
-using RzR.Core.CodeSource;
-
-#endregion
-
 namespace RzR.Extensions.EntityLength.Extensions.Internal
 {
     /// <summary>
@@ -42,24 +36,34 @@ namespace RzR.Extensions.EntityLength.Extensions.Internal
         /// <param name="text">string that will be truncated</param>
         /// <param name="maxLength">total length of characters to maintain before the truncate happens</param>
         /// <param name="useDots">Use 3 dots(...) in the end of string</param>
+        /// <param name="forceTrimEnd">
+        ///     True to trim trailing spaces on the retained substring before appending dots;
+        ///     false to preserve trailing spaces.
+        /// </param>
+        /// <remarks>
+        ///     Base implementation from 'https://github.com/I-RzR-I/DomainCommonExtensions'
+        /// </remarks>
         /// <returns>Truncated string</returns>
-        [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR", "RzR", "2022-09-27")]
-        internal static string Truncate(this string text, int maxLength, bool useDots = false)
+        internal static string Truncate(this string text, int maxLength, bool useDots = false, bool forceTrimEnd = true)
         {
             if (maxLength.IsLessOrEqualWithZero()) return text;
 
             const string suffix = "...";
-            var truncatedString = text;
+            if (!text.IsPresent() || text.Length <= maxLength)
+                return text;
 
-            var strLength = maxLength - (useDots.Equals(true) ? suffix.Length : 0);
+            var strLength = maxLength - (useDots ? suffix.Length : 0);
 
-            if (strLength.IsLessOrEqualWithZero()) return truncatedString;
-            if (!text.IsPresent() || text.Length <= maxLength) return truncatedString;
+            if (strLength.IsLessOrEqualWithZero())
+                return useDots
+                    ? suffix.Substring(0, maxLength)
+                    : string.Empty;
 
-            truncatedString = text.Substring(0, strLength);
-            truncatedString = truncatedString.TrimEnd();
+            var truncatedString = text.Substring(0, strLength);
+            if (useDots && forceTrimEnd)
+                truncatedString = truncatedString.TrimEnd();
 
-            if (useDots.Equals(true))
+            if (useDots)
                 truncatedString += suffix;
 
             return truncatedString;
@@ -72,24 +76,34 @@ namespace RzR.Extensions.EntityLength.Extensions.Internal
         /// <param name="text">String that will be truncated</param>
         /// <param name="maxLength">Total length of characters to maintain before the truncate happens</param>
         /// <param name="useDots">Use 3 dots(...) in the start of string</param>
+        /// <param name="forceTrimEnd">
+        ///     Reserved for API consistency with end truncation.
+        /// </param>
+        /// <remarks>
+        ///     Base implementation from 'https://github.com/I-RzR-I/DomainCommonExtensions'
+        /// </remarks>
         /// <returns>Truncated string</returns>
-        [CodeSource("https://github.com/I-RzR-I/DomainCommonExtensions", "RzR", "RzR", "2025-08-25")]
-        internal static string TruncateAtStart(this string text, int maxLength, bool useDots = false)
+        internal static string TruncateAtStart(this string text, int maxLength, bool useDots = false, bool forceTrimEnd = true)
         {
             const string prefix = "...";
             var truncatedString = text ?? string.Empty;
 
-            if (maxLength.IsLessOrEqualWithZero()) return truncatedString;
-            var strLength = maxLength - (useDots.Equals(true) ? prefix.Length : 0);
+            if (maxLength.IsLessOrEqualWithZero())
+                return truncatedString;
 
-            if (strLength.IsLessOrEqualWithZero()) return truncatedString;
+            if (!truncatedString.IsPresent() || truncatedString.Length <= maxLength)
+                return truncatedString;
 
-            if (!text.IsPresent() || text!.Length <= maxLength) return truncatedString;
+            var strLength = maxLength - (useDots ? prefix.Length : 0);
 
-            truncatedString = text.Substring(text.Length - strLength, strLength);
-            truncatedString = truncatedString.TrimEnd();
+            if (strLength.IsLessOrEqualWithZero())
+                return useDots
+                    ? prefix.Substring(0, maxLength)
+                    : string.Empty;
 
-            if (useDots.Equals(true))
+            truncatedString = truncatedString.Substring(truncatedString.Length - strLength, strLength);
+
+            if (useDots)
                 return prefix + truncatedString;
 
             return truncatedString;

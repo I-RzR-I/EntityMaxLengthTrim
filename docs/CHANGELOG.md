@@ -1,3 +1,10 @@
+### **v3.0.0.7529** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 19-05-2026
+* [DEV] - (RzR) -> Added configurable trailing-space handling during truncation, allowing preserve-space or trim-end behavior before suffixing.
+* [DEV] - (RzR) -> Propagated trim-end control through interceptor and fluent overloads, with global and per-property option support.
+* [DEV] - (RzR) -> Expanded policy flow with fail-fast throw behavior and richer trim context via a typed max-length exception.
+* [DEV] - (RzR) -> Hardened edge-case coverage for tiny max lengths, start/end truncation, whitespace preservation, and null-entity guards.
+* [DEV] - (RzR) -> Extended benchmark coverage for option-heavy processing and metadata cache warm/cold/concurrent scenarios.
+
 ### **v2.0.0.5778** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 21-04-2026
 * [2b50993] (RzR) -> Adapt with small validation in `ApplyStringMaxAllowedLength`.
 * [eb37829] (RzR) -> Add property cacher.

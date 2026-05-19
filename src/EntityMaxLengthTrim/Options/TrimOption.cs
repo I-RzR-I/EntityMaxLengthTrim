@@ -68,5 +68,16 @@ namespace RzR.Extensions.EntityLength.Options
         ///     Default value is truncate at the end of the string.
         /// </value>
         public StringTruncateType TruncateType { get; set; } = StringTruncateType.AtTheEndOf;
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether trailing whitespace is trimmed
+        ///     from the retained substring before returning the final value.
+        /// </summary>
+        /// <value>
+        ///     True to apply TrimEnd on the retained substring;
+        ///     false to preserve trailing spaces.
+        ///     Default value is <see langword="true" />.
+        /// </value>
+        public bool ApplyForceTrimEnd { get; set; } = true;
     }
 }
