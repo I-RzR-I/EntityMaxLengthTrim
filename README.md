@@ -26,10 +26,10 @@ Once you use this repository, you have the possibility to avoid database excepti
 
 No additional components or packs are required for use. So, it only needs to be added/installed in the project and can be used instantly.
 
-**In case you wish to use it in your project, u can install the package from <a href="https://www.nuget.org/packages/EntityMaxLengthTrim" target="_blank">nuget.org</a>** or specify what version you want:
+**In case you wish to use it in your project, u can install the package from <a href="https://www.nuget.org/packages/RzR.Extensions.EntityLength" target="_blank">nuget.org</a>** or specify what version you want:
 
 
-> `Install-Package EntityMaxLengthTrim -Version x.x.x.x`
+> `Install-Package RzR.Extensions.EntityLength -Version x.x.x.x`
 
 ## Content
 1. [USING](docs/usage.md)
