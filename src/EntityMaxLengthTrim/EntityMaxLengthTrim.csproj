@@ -23,8 +23,9 @@
 		<Language>en-US</Language>
 		<RepositoryType>GIT</RepositoryType>
 		<PackageIconUrl />
-		
+
 		<RootNamespace>RzR.Extensions.EntityLength</RootNamespace>
+		<AssemblyName>RzR.Extensions.EntityLength</AssemblyName>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
