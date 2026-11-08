@@ -37,8 +37,11 @@ namespace RzR.Extensions.EntityLength.Extensions.Internal
         /// <param name="maxLength">total length of characters to maintain before the truncate happens</param>
         /// <param name="useDots">Use 3 dots(...) in the end of string</param>
         /// <param name="forceTrimEnd">
-        ///     True to trim trailing spaces on the retained substring before appending dots;
-        ///     false to preserve trailing spaces.
+        ///     When <see langword="true" /> (default), trailing white-space (<c>char.IsWhiteSpace</c>, including CR/LF and tabs)
+        ///     is removed from the retained part after an over-length value is cut, for both truncation directions
+        ///     and with or without dots; for <c>AtTheStartOf</c> this is the end of the original value.
+        ///     When <see langword="false" />, the retained part is kept verbatim.
+        ///     Values within the limit are never modified.
         /// </param>
         /// <remarks>
         ///     Base implementation from 'https://github.com/I-RzR-I/DomainCommonExtensions'
@@ -60,7 +63,7 @@ namespace RzR.Extensions.EntityLength.Extensions.Internal
                     : string.Empty;
 
             var truncatedString = text.Substring(0, strLength);
-            if (useDots && forceTrimEnd)
+            if (forceTrimEnd)
                 truncatedString = truncatedString.TrimEnd();
 
             if (useDots)
@@ -77,7 +80,11 @@ namespace RzR.Extensions.EntityLength.Extensions.Internal
         /// <param name="maxLength">Total length of characters to maintain before the truncate happens</param>
         /// <param name="useDots">Use 3 dots(...) in the start of string</param>
         /// <param name="forceTrimEnd">
-        ///     Reserved for API consistency with end truncation.
+        ///     When <see langword="true" /> (default), trailing white-space (<c>char.IsWhiteSpace</c>, including CR/LF and tabs)
+        ///     is removed from the retained part after an over-length value is cut, for both truncation directions
+        ///     and with or without dots; for <c>AtTheStartOf</c> this is the end of the original value.
+        ///     When <see langword="false" />, the retained part is kept verbatim.
+        ///     Values within the limit are never modified.
         /// </param>
         /// <remarks>
         ///     Base implementation from 'https://github.com/I-RzR-I/DomainCommonExtensions'
@@ -102,6 +109,8 @@ namespace RzR.Extensions.EntityLength.Extensions.Internal
                     : string.Empty;
 
             truncatedString = truncatedString.Substring(truncatedString.Length - strLength, strLength);
+            if (forceTrimEnd)
+                truncatedString = truncatedString.TrimEnd();
 
             if (useDots)
                 return prefix + truncatedString;

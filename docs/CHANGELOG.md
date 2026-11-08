@@ -1,3 +1,7 @@
+### **v3.0.1.7739** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 08-11-2026
+* [FIX] - (RzR) -> Restored trailing-whitespace trim after over-length truncation (regressed in 3.0.0.7529 without dots and for AtTheStartOf); default forceTrimEnd=true matches v1.x/v2.x.
+* [FIX] - (RzR) -> forceTrimEnd / TrimOption.ApplyForceTrimEnd / PropertyOption.ApplyForceTrimEnd now take effect for both truncation directions, with or without dots; false keeps the retained part verbatim.
+
 ### **v3.0.0.7529** [[RzR](mailto:108324929+I-RzR-I@users.noreply.github.com)] 19-05-2026
 * [DEV] - (RzR) -> Added configurable trailing-space handling during truncation, allowing preserve-space or trim-end behavior before suffixing.
 * [DEV] - (RzR) -> Propagated trim-end control through interceptor and fluent overloads, with global and per-property option support.

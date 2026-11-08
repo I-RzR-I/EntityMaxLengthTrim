@@ -65,8 +65,11 @@ namespace RzR.Extensions.EntityLength.Extensions
         ///     Truncate string from the beginning or at the end.
         /// </param>
         /// <param name="forceTrimEnd">
-        ///     If set to <see langword="true" />, trailing spaces may be trimmed
-        ///     according to truncation strategy.
+        ///     When <see langword="true" /> (default), trailing white-space (<c>char.IsWhiteSpace</c>, including CR/LF and tabs)
+        ///     is removed from the retained part after an over-length value is cut, for both truncation directions
+        ///     and with or without dots; for <c>AtTheStartOf</c> this is the end of the original value.
+        ///     When <see langword="false" />, the retained part is kept verbatim.
+        ///     Values within the limit are never modified.
         /// </param>
         /// <returns></returns>
         /// <typeparam name="TEntity">Type of initialized object.</typeparam>
@@ -121,8 +124,11 @@ namespace RzR.Extensions.EntityLength.Extensions
         ///     Truncate string from the beginning or at the end.
         /// </param>
         /// <param name="forceTrimEnd">
-        ///     If set to <see langword="true" />, trailing spaces may be trimmed
-        ///     according to truncation strategy.
+        ///     When <see langword="true" /> (default), trailing white-space (<c>char.IsWhiteSpace</c>, including CR/LF and tabs)
+        ///     is removed from the retained part after an over-length value is cut, for both truncation directions
+        ///     and with or without dots; for <c>AtTheStartOf</c> this is the end of the original value.
+        ///     When <see langword="false" />, the retained part is kept verbatim.
+        ///     Values within the limit are never modified.
         /// </param>
         /// <returns></returns>
         /// <typeparam name="TEntity">Type of initialized object.</typeparam>
@@ -164,8 +170,11 @@ namespace RzR.Extensions.EntityLength.Extensions
         ///     process only specified props; otherwise, process all props.
         /// </param>
         /// <param name="forceTrimEnd">
-        ///     If set to <see langword="true" />, trailing spaces may be trimmed
-        ///     according to truncation strategy.
+        ///     When <see langword="true" /> (default), trailing white-space (<c>char.IsWhiteSpace</c>, including CR/LF and tabs)
+        ///     is removed from the retained part after an over-length value is cut, for both truncation directions
+        ///     and with or without dots; for <c>AtTheStartOf</c> this is the end of the original value.
+        ///     When <see langword="false" />, the retained part is kept verbatim.
+        ///     Values within the limit are never modified.
         /// </param>
         /// <returns></returns>
         /// <typeparam name="TEntity">Type of initialized object.</typeparam>

@@ -69,8 +69,11 @@ namespace RzR.Extensions.EntityLength.Interceptors
         ///     Type of truncation direction.
         /// </param>
         /// <param name="forceTrimEnd">
-        ///     If set to <see langword="true" />, trailing spaces may be trimmed
-        ///     according to truncation strategy.
+        ///     When <see langword="true" /> (default), trailing white-space (<c>char.IsWhiteSpace</c>, including CR/LF and tabs)
+        ///     is removed from the retained part after an over-length value is cut, for both truncation directions
+        ///     and with or without dots; for <c>AtTheStartOf</c> this is the end of the original value.
+        ///     When <see langword="false" />, the retained part is kept verbatim.
+        ///     Values within the limit are never modified.
         /// </param>
         /// <returns>Processed/parsed entity with new values</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
@@ -105,7 +108,6 @@ namespace RzR.Extensions.EntityLength.Interceptors
             return entity;
         }
 
-        /// -------------------------------------------------------------------------------------------------
         /// <summary>
         ///     Apply maximum allowed string length filter.
         /// </summary>
@@ -113,8 +115,8 @@ namespace RzR.Extensions.EntityLength.Interceptors
         ///     Thrown when one or more required arguments are null.
         /// </exception>
         /// <exception cref="EntityMaxLengthExceededException">
-        ///     Thrown when <see cref="TrimOption.Policy" /> is <see cref="TrimPolicy.Throw" /> and a string
-        ///     property exceeds its configured maximum length. The exception carries the
+        ///     Thrown when <see cref="TrimOption.Policy" /> is <see cref="TrimPolicy.Throw" /> and a
+        ///     string property exceeds its configured maximum length. The exception carries the
         ///     <see cref="TrimContext" /> describing the offending property.
         /// </exception>
         /// <typeparam name="TEntity">Type of the entity.</typeparam>
@@ -123,7 +125,6 @@ namespace RzR.Extensions.EntityLength.Interceptors
         /// <returns>
         ///     Processed/parsed entity with new values.
         /// </returns>
-        /// =================================================================================================
         public static TEntity ApplyStringMaxAllowedLength<TEntity>(
             TEntity entity,
             TrimOption trimOption)
@@ -219,8 +220,11 @@ namespace RzR.Extensions.EntityLength.Interceptors
         ///     Truncate string from the beginning or at the end.
         /// </param>
         /// <param name="forceTrimEnd">
-        ///     If set to <see langword="true" />, trailing spaces may be trimmed
-        ///     according to truncation strategy.
+        ///     When <see langword="true" /> (default), trailing white-space (<c>char.IsWhiteSpace</c>, including CR/LF and tabs)
+        ///     is removed from the retained part after an over-length value is cut, for both truncation directions
+        ///     and with or without dots; for <c>AtTheStartOf</c> this is the end of the original value.
+        ///     When <see langword="false" />, the retained part is kept verbatim.
+        ///     Values within the limit are never modified.
         /// </param>
         /// <returns>Processed/parsed entity with new values</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
@@ -302,8 +306,11 @@ namespace RzR.Extensions.EntityLength.Interceptors
         ///     Truncate string from the beginning or at the end.
         /// </param>
         /// <param name="forceTrimEnd">
-        ///     If set to <see langword="true" />, trailing spaces may be trimmed
-        ///     according to truncation strategy.
+        ///     When <see langword="true" /> (default), trailing white-space (<c>char.IsWhiteSpace</c>, including CR/LF and tabs)
+        ///     is removed from the retained part after an over-length value is cut, for both truncation directions
+        ///     and with or without dots; for <c>AtTheStartOf</c> this is the end of the original value.
+        ///     When <see langword="false" />, the retained part is kept verbatim.
+        ///     Values within the limit are never modified.
         /// </param>
         /// <returns>Processed/parsed entity with new values</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
@@ -373,8 +380,11 @@ namespace RzR.Extensions.EntityLength.Interceptors
         ///     only properties from param 'truncateWithDots'; otherwise, will be processed all fields.
         /// </param>
         /// <param name="forceTrimEnd">
-        ///     If set to <see langword="true" />, trailing spaces may be trimmed
-        ///     according to truncation strategy.
+        ///     When <see langword="true" /> (default), trailing white-space (<c>char.IsWhiteSpace</c>, including CR/LF and tabs)
+        ///     is removed from the retained part after an over-length value is cut, for both truncation directions
+        ///     and with or without dots; for <c>AtTheStartOf</c> this is the end of the original value.
+        ///     When <see langword="false" />, the retained part is kept verbatim.
+        ///     Values within the limit are never modified.
         /// </param>
         /// <returns>Processed/parsed entity with new values</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>
@@ -463,8 +473,11 @@ namespace RzR.Extensions.EntityLength.Interceptors
         ///     Truncate string from the beginning or at the end.
         /// </param>
         /// <param name="forceTrimEnd">
-        ///     If set to <see langword="true" />, trailing spaces may be trimmed
-        ///     according to truncation strategy.
+        ///     When <see langword="true" /> (default), trailing white-space (<c>char.IsWhiteSpace</c>, including CR/LF and tabs)
+        ///     is removed from the retained part after an over-length value is cut, for both truncation directions
+        ///     and with or without dots; for <c>AtTheStartOf</c> this is the end of the original value.
+        ///     When <see langword="false" />, the retained part is kept verbatim.
+        ///     Values within the limit are never modified.
         /// </param>
         /// <returns>Processed/parsed property with new value</returns>
         /// <typeparam name="TEntity">Current entity type</typeparam>

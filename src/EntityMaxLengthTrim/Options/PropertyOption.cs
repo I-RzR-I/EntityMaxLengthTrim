@@ -56,13 +56,16 @@ namespace RzR.Extensions.EntityLength.Options
         public StringTruncateType TruncateType { get; set; } = StringTruncateType.AtTheEndOf;
 
         /// <summary>
-        ///     Gets or sets a value indicating whether trailing whitespace should be trimmed
-        ///     from the retained substring for this property.
+        ///     Gets or sets a value indicating whether trailing white-space is removed from the retained part
+        ///     after an over-length value is cut, for this property.
         /// </summary>
         /// <value>
-        ///     <see langword="true" /> to trim trailing spaces,
-        ///     <see langword="false" /> to preserve them,
-        ///     or <see langword="null" /> to use the global/default setting.
+        ///     When <see langword="true" />, trailing white-space (<c>char.IsWhiteSpace</c>, including CR/LF and tabs)
+        ///     is removed from the retained part, for both truncation directions and with or without dots;
+        ///     for <c>AtTheStartOf</c> this is the end of the original value.
+        ///     When <see langword="false" />, the retained part is kept verbatim.
+        ///     When <see langword="null" />, the method-level value is used.
+        ///     Values within the limit are never modified.
         /// </value>
         public bool? ApplyForceTrimEnd { get; set; }
     }
