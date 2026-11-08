@@ -293,7 +293,7 @@ namespace EntityModelStringTruncateTest
         }
 
         [Test]
-        public void TruncateAtStart_WithoutDots_ApplyForceTrimEndTrue_Preserves_Trailing_Spaces()
+        public void TruncateAtStart_WithoutDots_ApplyForceTrimEndTrue_Trims_Trailing_Spaces()
         {
             var model = new MaxLengthFiveModel { Text = "abcd  " };
 
@@ -305,8 +305,8 @@ namespace EntityModelStringTruncateTest
                 ApplyForceTrimEnd = true
             });
 
-            Assert.AreEqual("bcd  ", result.Text);
-            Assert.AreEqual(5, result.Text.Length);
+            Assert.AreEqual("bcd", result.Text);
+            Assert.AreEqual(3, result.Text.Length);
         }
 
         [Test]

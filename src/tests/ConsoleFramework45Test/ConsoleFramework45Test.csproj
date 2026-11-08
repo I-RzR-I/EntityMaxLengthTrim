@@ -32,9 +32,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EntityMaxLengthTrim">
-      <HintPath>..\..\EntityMaxLengthTrim\bin\Debug\net45\EntityMaxLengthTrim.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\EntityMaxLengthTrim\EntityMaxLengthTrim.csproj">
+      <Project>{37BA6C5B-9259-49F6-ABC0-B6EB17D1015B}</Project>
+      <Name>EntityMaxLengthTrim</Name>
+      <SetTargetFramework>TargetFramework=net45</SetTargetFramework>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />

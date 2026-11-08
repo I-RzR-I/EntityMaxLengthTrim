@@ -53,11 +53,39 @@ var entity4 = model.ToSafeStoreStrings(
     processOnlyAssigned: true);
 ```
 
+## Trailing Whitespace After Truncation
+
+Version 3.0.0.7529 regressed the trimming of trailing whitespace. In `v1.*` and `v2.*`, once an over-length value was cut, the whitespace at the end of the retained part was always removed. In 3.0.0.7529 that only happened when dots were used. Without dots, which is the default, and for `StringTruncateType.AtTheStartOf`, the whitespace was kept, and `forceTrimEnd` had no effect there. For example, with a max length of `400`, a value made of 398 `a` characters followed by three spaces came back as 400 characters with two trailing spaces, instead of 398 characters.
+
+The release that follows 3.0.0.7529 restores the `v1.*` and `v2.*` behavior. The default is `forceTrimEnd = true`. It removes trailing whitespace from the retained part after the cut, with or without dots, for both `AtTheEndOf` and `AtTheStartOf`. Whitespace here means anything `char.IsWhiteSpace` accepts, so carriage returns, line feeds, and tabs are removed along with spaces. Values that are within the limit are never modified.
+
+For example, with a max length of `5` and the value `"abc  xyz"`, the retained part is `"abc  "`. The method changes the entity in place, so the two calls below use separate instances:
+
+```csharp
+// MyEntity.Name has a max length of 5.
+var a = new MyEntity { Name = "abc  xyz" };
+var b = new MyEntity { Name = "abc  xyz" };
+
+// Default (forceTrimEnd: true): the trailing spaces are removed, Name is "abc".
+var trimmed = StringInterceptor.ApplyStringMaxAllowedLength(a);
+
+// Opt out: the retained part is kept as is, Name is "abc  ".
+var preserved = StringInterceptor.ApplyStringMaxAllowedLength(
+    b,
+    useDotOnEnd: false,
+    truncateType: StringTruncateType.AtTheEndOf,
+    forceTrimEnd: false);
+```
+
+`AtTheStartOf` keeps the end of the original value, and the trim applies to that end only. The start of the kept part is never trimmed, so leading whitespace stays. With a max length of `5`, the value `"abc  defg"` becomes `" defg"`, and `"abcd  "` becomes `"bcd"`.
+
+Entities that derive from `EntityPropChangeEventBase` always trim trailing whitespace after an over-length cut. Values within the limit are untouched. This covers `OnPropertyChanged` and both `SetContent` overloads, and it matches `v1.*` and `v2.*`, so `v2.*` users see no change here. There is no supported opt-out on these paths in `v3.*`. If you are on 3.0.0.7529 and your entities depend on whitespace being kept through `EntityPropChangeEventBase`, plan for that before you move to the release that follows it.
+
 ## What v3 Adds
 
-The most useful addition in v3 is finer control over trailing spaces when truncation uses a dots suffix. In earlier usage patterns, the default effect was to trim the retained substring before appending `...`. That remains the default in v3, so existing behavior stays stable unless you choose otherwise.
+The most useful addition in v3 is control over the trailing-whitespace trim described above. In `v1.*` and `v2.*`, the retained part was trimmed whether or not dots were used, and there was no way to turn that off. The trim remains the default in v3, so existing behavior stays stable unless you choose otherwise.
 
-What v3 adds is the ability to preserve those trailing spaces when that detail matters to you. You can do that through the new `forceTrimEnd` overload parameter, or through the new option properties `TrimOption.ApplyForceTrimEnd` and `PropertyOption.ApplyForceTrimEnd`.
+What v3 adds is the ability to preserve that trailing whitespace when that detail matters to you. You can do that through the new `forceTrimEnd: false` overload parameter, or through the new option properties `TrimOption.ApplyForceTrimEnd = false` and `PropertyOption.ApplyForceTrimEnd = false`. When `PropertyOption.ApplyForceTrimEnd` is `null`, which is the default, the method-level value is used. These switches apply to the `StringInterceptor` and fluent APIs, not to `EntityPropChangeEventBase`.
 
 Here is the overload-based version:
 
@@ -97,16 +125,16 @@ var result = model.ToSafeStoreStrings(
     });
 ```
 
-In practical terms, this means a value can now keep the space before the suffix when you want it to. For example, with a max length of `6`, `ApplyForceTrimEnd = true` produces `ab...`, while `ApplyForceTrimEnd = false` produces `ab ...`.
+In practical terms, this means a value can keep the space before the suffix when you want it to. For example, with a max length of `6` and the value `"ab  xyz"`, `ApplyForceTrimEnd = true` produces `ab...`, while `ApplyForceTrimEnd = false` produces `ab ...`.
 
 v3 also behaves more predictably when the configured max length is extremely small and dots are enabled. Instead of producing an invalid result, it keeps the final value within the configured limit. For example, a max length of `1` becomes `.`, `2` becomes `..`, and `3` becomes `...`. If you have tests around very small limits, it is worth re-running them after the upgrade.
 
 ## Recommended Upgrade Path
 
-In practice, the migration usually comes down to four checks: update the package reference, update any old assembly-name-based integrations, add `CodeSource` explicitly only if your code truly depends on it, and then rerun the tests that cover truncation with dots or whitespace-sensitive input.
+In practice, the migration usually comes down to four checks: update the package reference, update any old assembly-name-based integrations, add `CodeSource` explicitly only if your code truly depends on it, and then rerun the tests that cover truncation of values that end in whitespace after the cut, with or without dots.
 
-If those tests pass, you can keep using the library exactly as before. The new whitespace-preservation controls are optional. You only need to opt in to `forceTrimEnd: false` or `ApplyForceTrimEnd = false` in places where preserving trailing spaces is actually part of the expected output.
+If those tests pass, you can keep using the library exactly as before. The new whitespace-preservation controls are optional. You only need to opt in to `forceTrimEnd: false` or `ApplyForceTrimEnd = false` in places where preserving trailing spaces is actually part of the expected output. If you came from 3.0.0.7529 and your output depended on whitespace being kept without dots or with `AtTheStartOf`, that output changes back to the `v1.*` and `v2.*` behavior, and you can opt out only on the `StringInterceptor` and fluent APIs.
 
 ## Bottom Line
 
-For most projects, this is a light migration. The package name changes, the assembly name changes, but the day-to-day API usage stays familiar. Update the reference, verify any assembly-based integration points, and then decide whether you want the new trailing-space behavior. If not, the default v3 behavior stays close to what v2 callers already expect.
+For most projects, this is a light migration. The package name changes, the assembly name changes, but the day-to-day API usage stays familiar. Update the reference, verify any assembly-based integration points, and then decide whether you need the optional trailing-space preservation. If not, the default v3 behavior trims trailing whitespace after a cut, exactly as v2 callers already expect. The one exception is 3.0.0.7529, which skipped that trim without dots and for `AtTheStartOf`; move to the release that follows it.
